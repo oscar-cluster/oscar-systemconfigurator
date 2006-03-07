@@ -1,0 +1,10 @@
+- There must me a YaBoot image named "/boot/yaboot" or "/boot/yaboot.chrp.
+- If running under a temporary root, $TEMPROOT, the image must be named "$TEMPROOT/boot/yaboot" or 
+  "$TEMPROOT/boot/yaboot.chrp". 
+- YaBoot image will be written to all PREP partitions found on the disk specified by BOOTDEV option. (Notice 
+  that the partition portion of BOOTDEV option will be ignored.) 
+  If BOOTDEV option is not specified, i.e. being called from System Imager, YaBoot image will be written to
+  all PREP partitions found in the system. 
+- This version of System Configurator supports CHRP platform only. 
+
+Send any question or comment to donghwajohnkim@yahoo.com

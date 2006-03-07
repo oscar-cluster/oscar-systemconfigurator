@@ -1,0 +1,37 @@
+System Configurator TODO List (as of Aug 1st 2001)
+--------------------------------------------------
+This todo list is brought to you because Trey was rightfully getting
+on my case about the fact that we didn't have one.  Hopefully it will
+let people know what needs to be done.
+
+Documentation Work
+------------------
+* Pod docs for all Modules in Network:: and Modules:: name spaces need updating
+* New sample.cfg file must be created for new config file options
+
+Website Work
+------------------
+* Documentation needs to be created about Hardware Detection for the website
+* Documentation about Lilo, Grub, and Yaboot bootloaders needed on website
+* More Distro stats for other distributions needed on the website
+
+Minor Code Work
+------------------
+* Networking to support Slackware needs to be added
+* Repackaging of libappconfig-perl rpm to make it test whether
+  or not it installed propperly
+* Figure out a way to factor out constructor from Modules::* and
+  put it in Modules::Generic (can probably do this with a couple of
+  package variables).
+
+Major Code Work
+------------------
+* Implement promiscous mode:
+  - Detect all hardware and setup network interfaces which are not user specified
+  - Detect all kernels in /boot and / and add them to the $config kernel\d blocks
+
+Ports (platforms we want to work on)
+------------------
+* Alpha
+* zSeries (S/390)
+

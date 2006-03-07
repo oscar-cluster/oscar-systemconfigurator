@@ -1,0 +1,496 @@
+#!/usr/bin/perl -w
+
+#   $Id: systemconfigurator,v 1.55 2005/03/25 23:50:45 sdague Exp $
+
+#   Copyright (c) 2001-2005 International Business Machines
+
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+ 
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+ 
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+#   Sean Dague <japh@us.ibm.com>
+
+=head1 NAME 
+
+systemconfigurator - configures... all Linux distributions, all Linux platforms, all the time.
+
+=head1 SYNOPSIS
+
+  systemconfigurator [--cfgfile=filename] 
+       [--stdin] [--verbose] [--debug]
+       [--confignet] [--confighw]
+       [--configrd] [--configboot]
+       [--configtime] [--configuserexit] 
+       [--runboot] [--configsi] 
+       [--configall] [--configkeyboard]
+       [--excludesto=filename]
+
+=head1 OPTIONS
+
+=item --cfgfile=filename
+
+Specify alternate config file.  By default the program attempts to read 
+/etc/systemconfig/systemconfig.conf.  As all options can also be specified
+on the command line, no error is generated in the event that a config file 
+can not be found.
+
+=item --stdin
+
+Read config file from stdin.  If this option is used, systemconfigurator will
+block while waiting on stdin for configuration data.
+
+=item --verbose
+
+Give more information about what is happening on STDERR
+
+=item --debug
+
+Give debugging information about what is happening on STDERR.
+For the most information, use --verbose and --debug.
+
+=item --confignet
+
+Configure networking scripts.  This is pretty straight forward and just
+creates the right entries in /etc/sysconfig/network-scripts, /etc/rc.config,
+or /etc/init.d
+
+=item --confighw
+
+Attempt to detect and configure hardware.  This uses System Configurator's
+own hardware database to do the configuration, and only works for PCI scsi
+and network cards.
+
+In the case that you want to use System Configurator's hardware setup, but need
+a different mapping of pci ids to modules, you can create overrides for System
+Configurator to use during detection.
+
+Create a file /etc/systemconfig/hardware.lst in the image being installed.  The format
+of this file is as follows:
+
+  Vendor Id    Card Id    Type     Module
+  ####         ####       xxx...   my_module   
+
+i.e.
+
+  8086   1010   ethernet   e1000
+
+The Vendor Id and Card Id are the two 4 hex digit numbers identifying the card.  
+The type can be one of B<scsi>, B<ethernet>, or B<tokenring>.  The module
+is the kernel module needed for the card.
+
+=item --configrd
+
+Create initial ramdisks for kernels that need them, and do not have them.  This
+will only work if the definitions for kernels have been specified, and the distribution
+has a supported native tool for ramdisk generation.  SuSE, Red Hat, Mandrake, and
+Debian are known to work.  The default ramdisk name will be sc-initrd-$kernelversion.gz
+
+=item --configboot
+
+Configure boot loader.  This only generates the bootloader configuration files,
+it does not install the bootloader.  It will only run if kernel and boot stanzas are 
+created.
+
+=item --runboot
+
+Run/install the bootloader.  This does nothing to the configuration files, it just
+runs the command needed to install the bootloader where it needs to go.  
+
+=item --configsi
+
+Configure those things that SystemImager needs.  Currently this is exactly the
+same as C<--confighw --confignet --runboot>.
+
+=item --configtime
+
+Configures timezone information for the machine.  Defaults to on, but will only
+be run if the time stanza is specified.
+
+=item --configuserexit
+
+Runs user exits after all other configuration is accomplished.  This is done as a
+final step, and only if user exit stanzas are specified.  It defaults to on.
+
+=item --configkeyboard
+
+Currently all this does is modify SLES7 installations to reset the keyboard to default
+settings instead of de-quertz which is set by the install rpms.  Eventually this will
+be enhanced to configure keymapping files directly.  It defaults to on, but may
+be turned off by adding --noconfigkeyboard to the commandline for those who
+wish to keep the de-quertz setting for SLES7.
+
+=item --configall
+
+Configure everything.
+
+=head1 DETAILS
+
+systemconfigurator provides a unified API to configure many aspects of Linux
+which differ between distributions and architectures.
+
+System Configurator does the following:
+
+=over 4
+
+=item *
+
+Detect and Setup PCI NICS and Storage Devices (SCSI).
+
+=item *
+
+Setup Network Scripts
+
+=item * 
+
+Setup Initrd (if required) and Bootloader
+
+=item *
+
+Configures time zone
+
+=item *
+
+Runs user specified user exits
+
+=back
+
+System Configurator does this through the concept of "footprinting".  For instance,
+each type of networking has a discrete footprint that will tell you which type is
+used on the computer.  Instead of determining which Linux distribution is
+installed, and then figuring out which networking is used by that Linux distribution,
+System Configurator lets each networking type test to see if their footprint
+exists, and if so, does the right thing.
+
+For more information about the configuration options available to systemconfigurator,
+please see L<SystemConfig::Config>.
+
+System Configurator is part of the System Installation Suite set of tools,
+which includes SystemImager and System Installer.  
+
+=head1 AUTHORS
+
+  Sean Dague <japh@us.ibm.com>
+  Donghwa John Kim <johkim@us.ibm.com>
+  Dann Frazier <dannf@dannf.org>
+  Joe Greenseid <jgreenseid@users.sourceforge.net>
+  Vasilios Hoffman <vhoffman01@wesleyan.edu>
+  Trey Belew <trey@veggie.wesleyan.edu>
+
+=head1 SEE ALSO
+
+L<systemconfig.conf>, L<perl>
+
+Far more documentation for systemconfigurator is maintained at the System Configurator
+web site (http://systemconfig.sourceforge.net).  The web site also maintains an
+active database of the differences between Linuxes which have been collected
+to support the System Configurator project.
+
+Please report any bugs you find in systemconfigurator to our bug tracker at
+https://sourceforge.net/tracker/?func=add&group_id=24006&atid=380273.
+
+Please send all other questions about systemconfigurator to 
+sisuite-users@lists.sourceforge.net.
+
+=head1 REVISION HISTORY
+
+$Log: systemconfigurator,v $
+Revision 1.55  2005/03/25 23:50:45  sdague
+updated version to include new kernel detection
+
+Revision 1.54  2005/03/24 23:22:40  sdague
+add modprobe.conf support, up version to 2.2.0 just for fun
+
+Revision 1.53  2003/06/27 21:08:02  sdague
+fix some issues with hardware ordering
+make SuSE less verbose at times
+
+Revision 1.52  2003/04/11 20:15:38  pramath
+Preparing for 2.0.6 Release.
+
+Revision 1.51  2003/01/19 23:26:19  sdague
+Sean's 2 hour plane trip
+Includes update of email addresses for sean
+PREFERED attribute of [BOOT]
+SHORTHOSTNAME attribute of [NETWORK]
+and a few other niceities
+
+Revision 1.50  2003/01/09 18:41:46  sdague
+changed all mailing list references to sisuite
+
+Revision 1.49  2003/01/08 00:18:17  sdague
+updated to 2.0.4
+
+Revision 1.48  2002/11/12 21:34:21  sdague
+use confignone
+
+Revision 1.47  2002/11/12 21:33:40  sdague
+use confignone instead of @ARGV
+
+Revision 1.46  2002/11/11 03:43:58  sdague
+change sanity test
+
+Revision 1.45  2002/10/16 18:02:52  sdague
+new docs for systemconfigurator
+
+Revision 1.44  2002/10/04 20:38:44  sdague
+update version to 2.0.0-1
+
+Revision 1.43  2002/09/18 18:17:25  sdague
+new Grub code which should deal with devfs correctly and use new tools
+
+Revision 1.42  2002/07/25 19:06:09  sdague
+backed off sc.spec to be 1.9.5-1
+
+Revision 1.41  2002/06/13 21:36:28  sdague
+Updates to make Keyboard work in SLES 7
+Time Zone stuff actually run
+SuSE8 networking actually run
+Better messages during network run under --verbose
+
+Revision 1.40  2002/06/11 20:48:47  sdague
+Added 1.9.3 CHANGELOG
+Fixed a couple of SuSE ramdisk bugs
+Added more docs to sample.cfg
+
+Revision 1.39  2002/06/10 18:15:01  sdague
+Some fixes for ramdisk versions
+
+Revision 1.38  2002/06/05 18:42:47  sdague
+added userexit to main codepath
+
+Revision 1.37  2002/04/02 19:56:43  sdague
+added new code
+
+Revision 1.36  2002/03/18 19:47:43  sdague
+added code to Makefile.PL to make it set versions during build
+
+Revision 1.35  2002/02/13 16:38:34  sdague
+added better error messages for rsync bugs and fixed a few lilo things
+
+Revision 1.34  2001/10/22 00:52:40  sdague
+making final tweaks for 1.00 release
+
+Revision 1.33  2001/10/13 20:29:14  sdague
+added Dann's name to the authors section of the main executable
+
+Revision 1.32  2001/08/17 17:42:21  greekboy
+updated systemconfigurator to use --debug and --configrd
+
+Revision 1.31  2001/08/07 15:56:16  sdague
+updated man page
+
+Revision 1.30  2001/08/06 22:15:07  sdague
+changelog updated for 0.85 release
+systemconfigurator now has --version flag
+
+Revision 1.29  2001/08/02 18:20:12  sdague
+pulled out references to Initrd code for now.  All test cases work.
+
+Revision 1.28  2001/08/02 17:40:12  donghwajohnkim
+Reverted calls to boot installer invocations
+
+Revision 1.27  2001/07/31 22:59:25  sdague
+moved all test cases over to new SCConfig module
+got rid of AppConfig in the tree, as we no longer need it
+
+Revision 1.26  2001/07/31 20:57:30  sdague
+systemconfigurator uses new neworking
+MANIFEST reflects new structure
+spec updated to 0.3.4
+Generic.pm cleanups
+
+Revision 1.25  2001/07/18 18:36:42  sdague
+Changed hardware module again.... exported reasonable api now
+
+Revision 1.24  2001/07/16 19:37:44  sdague
+made systemconfigurator actually invoke verbose logging if specified
+
+Revision 1.23  2001/07/16 18:56:51  sdague
+INSTALLSITELIB now set to /usr/lib/systemconfig.
+systemconfigurator program set to 'use lib' that directory.
+
+Revision 1.22  2001/07/13 19:48:13  greekboy
+updated ramdisk method call since it is now different
+
+Revision 1.21  2001/07/13 18:29:28  greekboy
+added support for creating ramdisks... now to make that support actually work
+
+Revision 1.20  2001/07/13 14:18:14  sdague
+added support for RUNBOOT option
+
+Revision 1.19  2001/07/12 18:08:28  greekboy
+oops..rolling back change, the problem was not here
+
+Revision 1.18  2001/07/12 17:51:48  greekboy
+fixed error message about  not being set
+
+Revision 1.17  2001/07/09 18:59:08  donghwajohnkim
+Taking out "Uninitialized ... " warning message.
+In case the user does not specify "ROOT" option, $ENV{PATH} does not need
+to be manipulated.
+
+Revision 1.16  2001/07/06 17:52:16  greekboy
+typo in pod
+
+Revision 1.15  2001/07/06 17:46:34  greekboy
+added documentation for flags for bootloader
+
+Revision 1.14  2001/07/05 17:35:29  donghwajohnkim
+Fixed method call to Boot::setup_boot().
+
+Revision 1.13  2001/06/19 18:58:39  sdague
+added path manipulation
+
+Revision 1.12  2001/06/05 15:24:28  greekboy
+fixed typo in pod doc
+
+Revision 1.11  2001/05/24 16:20:13  jgreenseid
+Made some changes to the pod docs.
+
+Revision 1.10  2001/05/22 17:02:02  sdague
+attempting to add Log keyword
+
+
+=cut
+
+use lib qw(lib /usr/lib/systemconfig);
+use SCConfig;
+use Network;
+use Hardware;
+use Initrd;
+use UserExit;
+use Boot;
+use Time;
+use Keyboard;
+use Util::Log qw(:all);
+use Carp;
+use strict;
+use vars qw($config $VERSION $EXEVERSION $VERBOSE);
+
+$EXEVERSION = "2.2.0";
+$VERBOSE = 0;
+
+if($config->get('version')) {
+    print <<EOL;
+systemconfigurator - $EXEVERSION
+Written by Sean Dague, Donghwa John Kim, et al.
+
+Copyright (C) 2001-2002 Internation Business Machines
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+EOL
+exit(0);
+}
+
+if($config->get('help')) {
+    usage();
+    exit(1);
+}
+
+if ($config->confignone) {
+    print "Hmmm... you did not seem to specify any options.\n";
+    print "Here is the --help documentation.  You may also want\n";
+    print "to try the man page.\n\n";
+    usage();
+    exit(1);
+}
+
+if($config->verbose()) {
+    $VERBOSE = 1;
+    start_verbose();
+}
+
+if($config->debug()) {
+    start_debug();
+}
+
+$ENV{PATH} = '/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin:' . $ENV{PATH};
+my $root = $config->root();
+if($root) {   
+    $ENV{PATH} = join ':', (map {"$root$_"} split(':',$ENV{PATH}));
+}
+
+my @files = qw(/etc/systemconfig/systemconfig.conf);
+
+if($config->confighw()) {
+    push @files, Hardware::setup($config);
+}
+
+if ($config->confignet()) {
+    push @files, Network::setup($config);
+}
+
+if ($config->configrd()) {
+    push @files, Initrd::setup($config);
+}
+
+if ($config->configboot()) {
+    push @files, Boot::install_config($config);
+}
+
+if($config->runboot()) {
+    Boot::install_loader($config);
+}
+
+if($config->configkeyboard()) {
+    Keyboard::setup($config);
+}
+
+if($config->configtime()) {
+    push @files, Time::setup($config);
+}
+
+if($config->configuserexit()) {
+    UserExit::setup($config);
+}
+
+# print Dumper($config);
+
+verbose("All done.  I have modified the following files:\n" . join "\n", (sort @files));
+
+if (my $excludes = $config->get('excludesto')) {
+    open(OUT,">$excludes");
+    print OUT "# System Configurator generated excludes file \n\n";
+    print OUT join "\n", (sort @files);
+    close(OUT);
+}
+
+sub usage {
+    print <<USAGE;
+usage: $0 [options] 
+
+   valid options :  
+      --cfgfile file    : specifies the config file to use.  Defaults to 
+                          /etc/systemconfig/systemconfig.conf.
+      --stdin           : take config file from STDIN
+      --help            : this message
+      --verbose         : generate more informational messages to STDERROR
+      --debug		: generate debugging messages to STDERROR
+      --confignet       : configure networking
+      --confighw        : configure hardware
+      --configrd        : configure initial ramdisks
+      --configboot      : configure boot loader config files
+      --runboot         : install bootloader
+      --configall       : configure everything
+      --configsi        : configure everything SystemImager uses
+      --excludesto file : generate SystemImager excludes file to 'file'
+
+For more information on config file format please see the systemconfig.conf
+man page.
+
+Report bugs to sisuite-devel\@lists.sourceforge.net.
+
+USAGE
+
+}
