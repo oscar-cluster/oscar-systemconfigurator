@@ -119,6 +119,19 @@ if(scalar @args) {
 
 $config->getopt(\@AGAIN);
 
+#
+# Replace special variables in global APPEND block:
+# <HOSTID> is replaced with the concatenation of all digits in the HOSTNAME
+#
+if ($config->boot_append) {
+    my $append = $config->boot_append;
+    if ($append =~ /<HOSTID>/) {
+	(my $hid = $ENV{HOSTNAME}) =~ s/\D//g;
+	$append =~ s/<HOSTID>/$hid/g;
+	$config->boot_append($append);
+    }
+}
+
 $::main::config = $config;
 
 sub populate_main_switches {
