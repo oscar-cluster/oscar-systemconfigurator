@@ -122,12 +122,20 @@ $config->getopt(\@AGAIN);
 #
 # Replace special variables in global APPEND block:
 # <HOSTID> is replaced with the concatenation of all digits in the HOSTNAME
+# Additionally allowed formats:
+#   <HOSTID-100>  or <HOSTID+2>
 #
 if ($config->boot_append) {
     my $append = $config->boot_append;
-    if ($append =~ /<HOSTID>/) {
+    if ($append =~ /<HOSTID([^>]*)>/) {
+	my $op = $1;
 	(my $hid = $ENV{HOSTNAME}) =~ s/\D//g;
-	$append =~ s/<HOSTID>/$hid/g;
+	if ($op && ($op =~ m/^(\+|\-)\d+$/)) {
+	    eval "\$hid = \$hid $op";
+	}
+	# strip leading zeros
+	$hid = sprintf "%d", $hid;
+	$append =~ s/<HOSTID([^>]*)>/$hid/g;
 	$config->boot_append($append);
     }
 }
