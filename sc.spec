@@ -2,9 +2,9 @@
 
 Summary: System Configurator
 Name: systemconfigurator
-Version: 2.2.2
+Version: 2.2.4
 Release: 11ef
-Copyright: GPL
+License: GPL
 URL: http://systemconfig.sourceforge.net
 Group: Applications/System
 Source: %{name}-%{version}.tar.gz
@@ -65,6 +65,13 @@ rm -rf /var/tmp/%{name}-%{version}-root
 %dir /usr/lib/systemconfig
 
 %changelog
+* Mon Aug 07 2006 Erich Focht
+- added --no-floppy to grub calls as suggested by Andrea Righi.
+- version 2.2.4
+* Mon Jul 17 2006 Erich Focht
+- added <HOSTID>, <HOSTID+nnn> and <HOSTID-nnn> hostname dependent
+  variable replacement (in the global APPEND block of the BOOT section).
+- version 2.2.3-11ef
 * Tue Mar 07 2006 Erich Focht <efocht@hpce.nec.com>
 - repackaging, eliminating additional patches
 - cleaning up build directory structure

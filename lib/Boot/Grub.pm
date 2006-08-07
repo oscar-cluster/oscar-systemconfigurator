@@ -239,7 +239,7 @@ sub device_map {
     
     !system("cp /proc/mounts /etc/mtab")
 	or croak("Couldn't copy /proc/mounts. Is /proc mounted?");
-    my $cmd = "$grub --batch --device-map=$file < /dev/null > /dev/null";
+    my $cmd = "$grub --batch --no-floppy --device-map=$file < /dev/null > /dev/null";
     !system($cmd) or croak("Couldn't run $cmd");
     
     verbose("generated device map file $file");
@@ -307,8 +307,9 @@ sub find_boot_part {
 sub install_loader {
     my $this = shift;
     my $bootpart = find_boot_part();
-    verbose("calling $$this{bootloader_exe} --recheck $bootpart\n");
-    system("$$this{bootloader_exe} --recheck $bootpart");
+    my $cmd = "$$this{bootloader_exe} --no-floppy --recheck $bootpart";
+    verbose("calling $cmd\n");
+    system("$cmd");
         
     my @grubroot = find_grub_root();
 
@@ -320,7 +321,7 @@ sub install_loader {
 	verbose("Grub root set to $gr, bootdev=$bootdev");
 
 	my $install_cmd = <<END_GRUB;
-$$this{grub} --no-curses <<EOF > /dev/null
+$$this{grub} --no-floppy --no-curses <<EOF > /dev/null
 root $gr
 setup $bootdev
 EOF
