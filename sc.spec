@@ -3,7 +3,7 @@
 Summary: System Configurator
 Name: systemconfigurator
 Version: 2.2.4
-Release: 11ef
+Release: 12ef
 License: GPL
 URL: http://systemconfig.sourceforge.net
 Group: Applications/System
@@ -36,6 +36,9 @@ configuration files.
 %build
 cd $RPM_BUILD_DIR/%{name}-%{version}
 mkdir -p /var/tmp/%{name}-%{version}-root/usr/share/man/man5
+mv Makefile.PL Makefile.PL_old
+sed -e "s/versionxyz/%{version}/" < Makefile.PL_old > Makefile.PL
+rm -f Makefile.PL_old
 perl Makefile.PL PREFIX=/var/tmp/%{name}-%{version}-root%{prefix} INSTALLSITELIB=/var/tmp/%{name}-%{version}-root/usr/lib/systemconfig INSTALLMAN1DIR=/var/tmp/%{name}-%{version}-root/usr/share/man/man1 INSTALLMAN3DIR=/var/tmp/%{name}-%{version}-root/usr/share/man/man3 INSTALLSITEMAN1DIR=/var/tmp/%{name}-%{version}-root/usr/share/man/man1 INSTALLSITEMAN3DIR=/var/tmp/%{name}-%{version}-root/usr/share/man/man3 INSTALLSITEBIN=/var/tmp/%{name}-%{version}-root/usr/bin INSTALLSITESCRIPT=/var/tmp/%{name}-%{version}-root/usr/bin
 make
 make test
