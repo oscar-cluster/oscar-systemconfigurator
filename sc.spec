@@ -2,7 +2,7 @@
 
 Summary: System Configurator
 Name: systemconfigurator
-Version: 2.2.4
+Version: 2.2.5
 Release: 12ef
 License: GPL
 URL: http://systemconfig.sourceforge.net
@@ -68,6 +68,10 @@ rm -rf /var/tmp/%{name}-%{version}-root
 %dir /usr/lib/systemconfig
 
 %changelog
+* Wed Aug 23 2006 Erich Focht
+- added cechk for --no-floppy support of grub (RHEL3 doesn't support it)
+- made functions in Grub.pm more OO. Needed for storing "nofloppy" capability
+  centrally, in the object instance.
 * Mon Aug 07 2006 Erich Focht
 - added --no-floppy to grub calls as suggested by Andrea Righi.
 - version 2.2.4
