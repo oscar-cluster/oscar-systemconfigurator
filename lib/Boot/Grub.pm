@@ -1,7 +1,6 @@
 package Boot::Grub;
 
-#   $Header: /cvsroot/systemconfig/systemconfig/lib/Boot/Grub.pm,v 1.29 2003/11/17 20:56:58 pramath Exp $
-
+#   $Id$
 
 #   Copyright (c) 2001 International Business Machines
 
@@ -22,6 +21,9 @@ package Boot::Grub;
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #   Donghwa John Kim <johkim@us.ibm.com>
+#
+#   Copyright (c) 2006 Erich Focht <efocht@hpce.nec.com>
+
 
 =head1 NAME
 
@@ -97,16 +99,38 @@ sub new {
                 grub => which('grub'), # location of grub
                 bootloader_exe => which('grub-install'), # location of grub-install
                 bootdev => "(hd0)",     ### Device to which to install boot image. (default, we'll mod this later)
+		nofloppy => &detect_nofloppy(),
                );
 
     verbose("Grub executable set to: $this{bootloader_exe}.");
     $this{config_file} = "$this{root}/boot/grub/menu.lst";
-    $this{config_file} = "$this{root}/boot/grub/menu.lst";    
     if (-l "$this{root}/boot/grub/menu.lst") {
         $this{config_file} = "$this{root}/boot/grub/grub.conf";
     }
      
     bless \%this, $class;
+}
+
+# subroutine to detect whether the --no-floppy argument is accepted by
+# the current grub version or not.
+
+sub detect_nofloppy {
+    my $ret = "--no-floppy";
+    local *CMD;
+    open CMD, "env LC_ALL=C grub-install --no-floppy |"
+	or croak "Could not run grub-install";
+    while (<CMD>) {
+	if (/Unrecognized option/) {
+	    $ret = "";
+	}
+    }
+    close CMD;
+    if ($ret) {
+	verbose("grub supports --no-floppy argument.");
+    } else {
+	verbose("grub does not support --no-floppy argument.");
+    }
+    return $ret;
 }
 
 # footpring_config returns "TRUE" if Grub's configuration file, i.e. "/boot/grub/menu.lst", exists. 
@@ -149,11 +173,12 @@ sub get_default_boot {
 # matching an entry in the device map file) used by Grub 
 
 sub dev2bios {
+    my $this = shift;
     my ($devpath) = @_;
     my $biosdev = "";
 
     if(!(defined $DEVICE_MAP)) {
-        $DEVICE_MAP = device_map(which("grub")); 
+        $DEVICE_MAP = $this->device_map(); 
     }
 
     $devpath = devfs_lookup($devpath);
@@ -174,13 +199,14 @@ sub dev2bios {
 }
 
 sub dev2biosarr {
+    my $this = shift;
     my ($devpath) = @_;
     my $biosdev;
     my @devs = ();
     my @tmpdevs = ();
 
     if(!(defined $DEVICE_MAP)) {
-        $DEVICE_MAP = device_map(which("grub")); 
+        $DEVICE_MAP = $this->device_map(); 
     }
 
     if ($devpath =~ /^\/dev\/md/) {
@@ -229,7 +255,7 @@ sub dev2biosarr {
 # loads the device map into a memory struct
 
 sub device_map {
-    my $grub = shift;
+    my $this = shift;
     my $device_map = {};
       
     my $file = "/tmp/grub.devices";
@@ -239,7 +265,7 @@ sub device_map {
     
     !system("cp /proc/mounts /etc/mtab")
 	or croak("Couldn't copy /proc/mounts. Is /proc mounted?");
-    my $cmd = "$grub --batch --no-floppy --device-map=$file < /dev/null > /dev/null";
+    my $cmd = "$$this{grub} --batch $$this{nofloppy} --device-map=$file < /dev/null > /dev/null";
     !system($cmd) or croak("Couldn't run $cmd");
     
     verbose("generated device map file $file");
@@ -264,6 +290,7 @@ sub device_map {
 # return bios mapping for /boot or /
 
 sub find_grub_root {
+    my $this = shift;
     my $fstab = Boot::Label::fstab_struct("/etc/fstab");
     
     # invert the mapping... now it is mount => device name
@@ -273,7 +300,7 @@ sub find_grub_root {
 	verbose("mount: $mount");
         if($mounts{$mount}) {
 	    verbose("mount: $mount mounts: $mounts{$mount}");
-            return dev2biosarr($mounts{$mount});
+            return $this->dev2biosarr($mounts{$mount});
         }
     }
 
@@ -282,6 +309,7 @@ sub find_grub_root {
 }
 
 sub find_boot_part {
+    my $this = shift;
     my $fstab = Boot::Label::fstab_struct("/etc/fstab");
     
     # invert the mapping... now it is mount => device name
@@ -306,12 +334,12 @@ sub find_boot_part {
 
 sub install_loader {
     my $this = shift;
-    my $bootpart = find_boot_part();
-    my $cmd = "$$this{bootloader_exe} --no-floppy --recheck $bootpart";
+    my $bootpart = $this->find_boot_part();
+    my $cmd = "$$this{bootloader_exe} $$this{nofloppy} --recheck $bootpart";
     verbose("calling $cmd\n");
     system("$cmd");
         
-    my @grubroot = find_grub_root();
+    my @grubroot = $this->find_grub_root();
 
     verbose("Installing GRUB! $grubroot[0] $grubroot[1]\n");
 
@@ -321,7 +349,7 @@ sub install_loader {
 	verbose("Grub root set to $gr, bootdev=$bootdev");
 
 	my $install_cmd = <<END_GRUB;
-$$this{grub} --no-floppy --no-curses <<EOF > /dev/null
+$$this{grub} $$this{nofloppy} --no-curses <<EOF > /dev/null
 root $gr
 setup $bootdev
 EOF
@@ -335,7 +363,7 @@ END_GRUB
 # dev_transform takes the path (in devfs format) and turns it into a grub device
 
 sub dev_transform {
-    my ($path) = @_;
+    my ($this, $path) = @_;
     my @devarr = ();
 
     if(!$FSTAB) {
@@ -348,13 +376,13 @@ sub dev_transform {
     foreach my $mount (@mounts) {
         if($mount ne "/" and $path =~ s/^$mount//) {
             verbose("Mount = $mount; Path = $path");
-	    my @biosarr = dev2biosarr($mounts{$mount});
+	    my @biosarr = $this->dev2biosarr($mounts{$mount});
 	    foreach my $b (@biosarr) {
 		push @devarr, $b . $path;
 	    }
             last;
         } elsif ($mount eq "/") {
-	    my @biosarr = dev2biosarr($mounts{$mount});
+	    my @biosarr = $this->dev2biosarr($mounts{$mount});
 	    foreach my $b (@biosarr) {
 		push @devarr, $b . $path;
 	    }
@@ -376,7 +404,9 @@ sub install_config {
     my @splashfiles = qw(/boot/grub/splash.xpm.gz);
     my $splashline = "";
     my @splashdevs = ();
-    my $extra1 = $this->{boot_extras}; my $extra2 = $this->{boot_extras2}; my $extra3 = $this->{boot_extras3};
+    my $extra1 = $this->{boot_extras};
+    my $extra2 = $this->{boot_extras2};
+    my $extra3 = $this->{boot_extras3};
 
     if(!$this->{boot_defaultboot}) {
 	croak("Error: DEFAULTBOOT must be specified.\n");;
@@ -384,7 +414,7 @@ sub install_config {
 
     foreach my $img (@splashfiles) {
         if(-e $img) {
-	    @splashdevs = (sort(dev_transform($img)));
+	    @splashdevs = (sort($this->dev_transform($img)));
             $splashline = "splashimage=" . $splashdevs[0];
             last;
         }
@@ -394,8 +424,8 @@ sub install_config {
     open(OUT,">$this->{config_file}") or croak("Couldn't open $this->{config_file} for writing!");
     
     my $timeout = $this->{boot_timeout} / 10;
-    my $defaultbootnum = get_default_boot($this);
-    if (scalar(find_grub_root()) == 2) {
+    my $defaultbootnum = $this->get_default_boot();
+    if (scalar($this->find_grub_root()) == 2) {
 	$defaultbootnum *= 2;
     }
 
@@ -451,17 +481,18 @@ sub setup_kernel {
     my $label = $this->{$image . "_label"};
 #    my $boot_device = $this->dev2bios($this->{boot_bootdev}) || $this->{bootdev};
 
-    my @kernels = dev_transform($this->{$image . "_path"});verbose("Kernels:".join(":",@kernels));
+    my @kernels = $this->dev_transform($this->{$image . "_path"});
+    verbose("Kernels:".join(":",@kernels));
     #my $kernel = $this->{$image . "_path"};
     #$kernel =~ s:^/boot/:/:;
     my $rootdev = $this->{$image . "_rootdev"} || $this->{boot_rootdev};
-    my @initrds = ($this->{$image . "_initrd"}) ? dev_transform($this->{$image . "_initrd"}) : ("");
+    my @initrds = ($this->{$image . "_initrd"}) ? $this->dev_transform($this->{$image . "_initrd"}) : ("");
     #my $initrd =  ($this->{$image . "_initrd"}) ? $this->{$image . "_initrd"} : "";
     #$initrd =~ s:^/boot/:/:;
     #my $initrdline = $initrd ? "\tinitrd " . $initrd : "";
     my $append = $this->{$image . "_append"} || $this->{boot_append};
 
-    foreach my $r (sort(find_grub_root())) {
+    foreach my $r (sort($this->find_grub_root())) {
 	my ($initrdline,$initrd);
 	if (scalar(@initrds)) {
 	    $initrd = (grep(/$r/,@initrds))[0];
