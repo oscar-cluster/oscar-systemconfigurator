@@ -117,7 +117,7 @@ sub new {
 sub detect_nofloppy {
     my $ret = "--no-floppy";
     local *CMD;
-    open CMD, "env LC_ALL=C grub-install --no-floppy |"
+    open CMD, "/bin/env LC_ALL=C grub-install --no-floppy |"
 	or croak "Could not run grub-install";
     while (<CMD>) {
 	if (/Unrecognized option/) {
