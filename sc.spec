@@ -2,7 +2,7 @@
 
 Summary: System Configurator
 Name: systemconfigurator
-Version: 2.2.5
+Version: 2.2.6
 Release: 12ef
 License: GPL
 URL: http://systemconfig.sourceforge.net
@@ -68,8 +68,11 @@ rm -rf /var/tmp/%{name}-%{version}-root
 %dir /usr/lib/systemconfig
 
 %changelog
+* Fri Sep 15 2006 Erich Focht
+- locating "env" with "which". Path to env is different in SuSE and RedHat.
+- version 2.2.6-12ef
 * Wed Aug 23 2006 Erich Focht
-- added cechk for --no-floppy support of grub (RHEL3 doesn't support it)
+- added check for --no-floppy support of grub (RHEL3 doesn't support it)
 - made functions in Grub.pm more OO. Needed for storing "nofloppy" capability
   centrally, in the object instance.
 * Mon Aug 07 2006 Erich Focht
