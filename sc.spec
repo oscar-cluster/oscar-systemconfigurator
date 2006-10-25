@@ -2,7 +2,7 @@
 
 Summary: System Configurator
 Name: systemconfigurator
-Version: 2.2.6
+Version: 2.2.7
 Release: 12ef
 License: GPL
 URL: http://systemconfig.sourceforge.net
@@ -68,6 +68,9 @@ rm -rf /var/tmp/%{name}-%{version}-root
 %dir /usr/lib/systemconfig
 
 %changelog
+* Wed Oct 25 2006 Erich Focht
+- fixing issue with unknown additional scsi device (oscar bug #274).
+- version 2.2.7-12ef
 * Fri Sep 15 2006 Erich Focht
 - locating "env" with "which". Path to env is different in SuSE and RedHat.
 - version 2.2.6-12ef
