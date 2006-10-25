@@ -46,6 +46,7 @@ sub setup {
     my $outfile = initrd_file($version);
     
     my $mkinitrd = "/sbin/mkinitrd_sis";
+    ny $allowmissing;
     if (!-x $mkinitrd) {
 	if (!open OMK, ">$mkinitrd") {
 	    carp("WARNING: Could not create copy of mkinitrd, creation of RH style initrd failed.");
@@ -53,6 +54,9 @@ sub setup {
 	}
 	open IMK, "/sbin/mkinitrd";
 	while (<IMK>) {
+	    if (/allowmissing/) {
+		$allowmissing = 1;
+	    }
 	    s/ cp -a / cp -aL /;
 	    s/\tcp -a /\tcp -aL /;
 	    print OMK;
@@ -61,7 +65,8 @@ sub setup {
 	close OMK;
 	system("chmod 755 $mkinitrd");
     }
-    my $cmd = "$mkinitrd -f $outfile $version";
+    $allowmissing = "--allow-missing" if ($allowmissing);
+    my $cmd = "$mkinitrd $allowmissing -f $outfile $version";
     my $rc = system($cmd);
     if($rc != 0) {
         carp("WARNING: RH style ramdisk generation failed.");
