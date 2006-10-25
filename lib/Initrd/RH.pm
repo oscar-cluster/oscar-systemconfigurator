@@ -46,7 +46,7 @@ sub setup {
     my $outfile = initrd_file($version);
     
     my $mkinitrd = "/sbin/mkinitrd_sis";
-    ny $allowmissing;
+    my $allowmissing;
     if (!-x $mkinitrd) {
 	if (!open OMK, ">$mkinitrd") {
 	    carp("WARNING: Could not create copy of mkinitrd, creation of RH style initrd failed.");
