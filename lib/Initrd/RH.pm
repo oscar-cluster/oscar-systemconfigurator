@@ -29,7 +29,7 @@ use Data::Dumper;
 use Initrd::Generic;
 use vars qw($VERSION);
 
-$VERSION = sprintf("%s", q$Revision$ =~ /(r\d+)/);
+$VERSION = sprintf("%d", q$Revision$ =~ /(\d+)/);
 
 push @Initrd::rdtypes, qw(Initrd::RH);
 

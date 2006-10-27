@@ -30,7 +30,7 @@ use vars qw($VERSION $AUTOLOAD @EXPORT);
 
 @EXPORT = qw(kernel_version initrd_file);
 
-$VERSION = sprintf("%s", q$Revision$ =~ /(r\d+)/);
+$VERSION = sprintf("%d", q$Revision$ =~ /(\d+)/);
 
 # Super simple kernel version.  Just open the kernel an
 # look for a line like 2.4.8-27stuff in it 
