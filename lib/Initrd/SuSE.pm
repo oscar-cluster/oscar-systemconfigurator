@@ -1,6 +1,6 @@
 package Initrd::SuSE;
 
-#   $Id: SuSE.pm,v 1.9 2003/06/27 15:17:15 sdague Exp $
+#   $Id$
 
 #   Copyright (c) 2002 International Business Machines
 
@@ -28,7 +28,7 @@ use Modules::Deps;
 use Initrd::Generic;
 use vars qw($VERSION);
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.9 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%s", q$Revision$ =~ /(r\d+)/);
 
 push @Initrd::rdtypes, qw(Initrd::SuSE);
 

@@ -1,6 +1,6 @@
 package Initrd::Generic;
 
-#   $Id: Generic.pm,v 1.4 2003/01/19 23:26:20 sdague Exp $
+#   $Id$
 
 #   Copyright (c) 2002 International Business Machines
 
@@ -30,7 +30,7 @@ use vars qw($VERSION $AUTOLOAD @EXPORT);
 
 @EXPORT = qw(kernel_version initrd_file);
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.4 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%s", q$Revision$ =~ /(r\d+)/);
 
 # Super simple kernel version.  Just open the kernel an
 # look for a line like 2.4.8-27stuff in it 

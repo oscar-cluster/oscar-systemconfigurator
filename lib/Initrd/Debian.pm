@@ -1,6 +1,6 @@
 package Initrd::Debian;
 
-#   $Id: Debian.pm,v 1.4 2004/09/19 17:43:58 dannf Exp $
+#   $Id$
 
 #   Copyright (c) 2002 International Business Machines
 
@@ -26,7 +26,7 @@ use Data::Dumper;
 use Initrd::Generic;
 use vars qw($VERSION);
 
-$VERSION = sprintf("%d.%02d", q$Revision: 1.4 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%s", q$Revision$ =~ /(r\d+)/);
 
 push @Initrd::rdtypes, qw(Initrd::Debian);
 
