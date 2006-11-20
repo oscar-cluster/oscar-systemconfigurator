@@ -83,6 +83,8 @@ sub new {
                 $this{bootloader_exe} = "$this{root}/boot/yaboot.$this{platform_t}";
             } elsif (-e $this{root}."/boot/yaboot") {
                 $this{bootloader_exe} = "$this{root}/boot/yaboot";
+            } elsif (-e $this{root}."/usr/lib/yaboot/yaboot") {
+                $this{bootloader_exe} = "$this{root}/usr/lib/yaboot/yaboot";
             } else {
                 verbose("Read README file for naming of Yaboot image.");
                 carp("Cannot find a Yaboot image.\n");
