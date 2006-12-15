@@ -1,0 +1,6 @@
+Add files for the generation of the Debian package (using 'make deb')
+--This line, and those below, will be ignored--
+
+M    control
+M    changelog
+M    rules

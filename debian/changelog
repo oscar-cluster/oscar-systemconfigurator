@@ -1,0 +1,6 @@
+systemconfigurator (2.2.2-1) unstable; urgency=low
+
+  [ Geoffroy Vallee ]
+  * Initial package.
+
+ -- valleegr <valleegr@ornl.gov>  Fri,  9 Jun 2006 09:22:06 -0400
