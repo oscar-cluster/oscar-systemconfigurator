@@ -227,6 +227,7 @@ sub populate_boot {
                         $var . "_initrd" => {},
                         $var . "_append" => {},
                         $var . "_rootdev" => {},
+			$var . "_hostos" => {},
                        );
     }
 }

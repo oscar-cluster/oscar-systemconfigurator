@@ -493,26 +493,57 @@ sub setup_kernel {
     #$initrd =~ s:^/boot/:/:;
     #my $initrdline = $initrd ? "\tinitrd " . $initrd : "";
     my $append = $this->{$image . "_append"} || $this->{boot_append};
+    # the module line is used to setup an Hypervisor such as Xen
+    my $moduleline = "";
+    if ($this->{$image . "_hostos"} ne "") {
+	$moduleline = $this->{$image . "_hostos"};
+	$moduleline =~ s:^/boot/:/:;
+	$moduleline = "\tmodule " . $moduleline . " root=" . $rootdev;
+	$moduleline = $moduleline . " ro console=tty0";
+    }
 
     foreach my $r (sort($this->find_grub_root())) {
 	my ($initrdline,$initrd);
 	if (scalar(@initrds)) {
 	    $initrd = (grep(/$r/,@initrds))[0];
 	    $initrd =~ s /\($r\)//;
-	    $initrdline = "\tinitrd " . $initrd;
+	    if ($this->{$image . "_hostos"} eq "") {
+	        $initrdline = "\tinitrd " . $initrd;
+	    } else {
+	        $initrdline = "\tmodule " . $initrd;
+	    }
 	}
 	my $kernel = (grep(/$r/,@kernels))[0];
 	$kernel =~ s/\($r\)//;
-	verbose("kernel boot section: partition=$r label=$label kernel=$kernel initrd=$initrd");
-	
-	print $outfh <<EOF;
+	my $kernelline = "";
+	if ($this->{$image . "_hostos"} ne "") {
+	    verbose("Setting up an Hypervisor: $kernel");
+	    $kernelline = $kernel;
+	} else {
+            $kernelline = $kernel . " ro root=" . $rootdev;
+	}
+	$kernelline = "\tkernel " . $kernelline . " " . $append;
+
+        if ($moduleline ne "") {
+	    print $outfh <<EOF;
 # $image
 title ${label}_${r}
 \troot $r
-\tkernel $kernel ro root=$rootdev $append
+$kernelline
+$moduleline
 $initrdline
 
 EOF
+        } else {
+            print $outfh <<EOF;
+# $image
+title ${label}_${r}
+\troot $r
+$kernelline
+$initrdline
+
+EOF
+        } 
     }
 }
 
