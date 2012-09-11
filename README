@@ -40,4 +40,7 @@ of this software.
 There is a possible exception to NOTE 2, as significant quantities of sushi
 were consumed during the design of this project.
 
+*** NOTE 4 ***
 
+To build the RPM package without being root, execute the following command:
+    rpmbuild -ba --define '%check exit 0' sc.spec
