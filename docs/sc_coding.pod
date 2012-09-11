@@ -1,0 +1,139 @@
+=head1 NAME
+
+System Configurator Coding Guidelines
+
+=head1 DESCRIPTION
+
+The following is a list of does and do nots for the System
+Configurator project. As with any set of coding standards, a lot of it
+is fairly arbitrary based on what I consider best known practices.
+
+=head1 MUSTS
+
+Every module B<must> contain the following:
+
+=over 4
+
+=item B<*>
+
+use strict;
+
+This keeps you from doing really silly things like using variables
+that don't exist.  Debugging perl without this is nearly impossible.
+
+=item B<*>
+
+Pod documentation
+
+Every module must explain its own functions and purpose in a pod
+document.  This is where the Authors should be specified.
+
+=item B<*>
+
+Be compatible with perl 5.005_03
+
+This means that use of the B<our> keyword is out.  I can't think of
+any other bad perl 5.6isms at the moment, but the general idea is to
+work with any version of perl 5.005 and up.
+
+=back
+
+=head1 SHOULDS
+
+Reading the perlstyle manpage will get you far on this path.  After
+that, here are a few of my own biases.
+
+=over 4
+
+=item B<*>
+
+An B<if> statement should be an B<if> statement.
+
+Just because there are 12 ways to do things in Perl, doesn't mean you
+should use them all.
+
+  for (@things) {
+     /me/ && do {
+         ...
+     }
+  }
+
+is valid perl, however it is much clearer if written as follows:
+
+  foreach my $item (@things) {
+     if($item =~ /me/) {
+         ...
+     }
+  }
+
+And in many cases what you really even wanted was:
+
+  foreach my $item (@things) { 
+      if($item eq 'me') { 
+          ...  
+      } 
+  }  
+
+The lastcase is probably the most clear of all.  Clarity is the most
+important thing for source code that is going to exist for more than a
+few months.
+
+=item B<*>
+
+Limit use of $_ implicitly.
+
+By naming variables useful things you add meaning to the code.  Over
+reliance of $_ makes it harder to trace what $_ is being used for.
+
+  foreach (@interfaces) {
+     $_->device;
+  }
+
+is much clearer as:
+
+  foreach my $interface (@interfaces) {
+     $interface->device;
+  }
+
+=item B<*>
+
+Avoid use of global variables whenever possible.
+
+If you have to use them, you better have a really good reason.  There
+are a couple instances in the code where we couldn't get arround them,
+but we did try really hard not to use them anywhere else.
+
+=item B<*>
+
+Avoid system() or qx// calls whenever possible.
+
+Much of the clib is linked directly into Perl.  This gives one access
+to such functions as I<link>, I<unlink>, I<chmod>, I<chown>, and
+I<kill>, without having to execute a sub process.  Reducing the
+overhead of the subprocess is valuable whenever you can do it.
+
+=item B<*>
+
+Have modules use subroutines to access their internal variables.
+
+  $interface->{device}
+
+is better written as
+
+  $interface->device
+
+This also means that the internal data structure of the Interface
+object can change without the external interface changing at all.
+
+If you want to know more about the benifits of this, check out Damian
+Conway's truly excellent I<Object Oriented Perl>.
+
+=back
+
+=head1 AUTHORS
+
+  Sean Dague <japh@us.ibm.com>
+
+=head1 SEE ALSO
+
+L<perlstyle>

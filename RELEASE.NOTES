@@ -1,0 +1,77 @@
+System Configurator 2.0.0
+-------------------------
+We are proud to announce the release of System Configurator 2.0.0.
+This is a major enhancement from the last stable release of 1.20.  The
+following new features have been added since the 1.x release stream.
+
+* Time Zone Configuration 
+       SC now takes a [TIME] stanza, which can be used to set time
+       zone information on the client during installation.  This means
+       a single image can be used in multiple time zones and be
+       configured correctly.  (man systemconfig.conf for more info)
+
+* User Exits
+       A new [USEREXIT\d] stanza was added.  This allows
+       administrators to specify an arbitrary number of user exits to
+       be run after SC finishes configuration.  (man systemconfig.conf
+       for syntax)
+
+* Native Tools for Ramdisk Generation
+       SC now uses native tools (mkinitrd or mk_initrd) for ramdisk
+       configuration, instead of its own home brew solution.  This
+       means that ramdisks should look and work just as if they were 
+       created by the native distribution.  Red Hat, SuSE, Debian, and
+       Mandrake are known to work with the new method.
+
+* iSeries support
+       Support has been added for the IBM iSeries (64bit PPC)
+       Platform.  iSeries images can now be installed if using a CVS
+       release of SystemImager and SystemInstaller.  Official support
+       from the rest of SIS will be coming shortly.
+
+* Grub support
+       I'm now convinced we have grub working correctly in nearly all
+       cases.  Bootdev other than (hd0) is now supported, as are
+       labels on disk devices.  This code has been tested with Red Hat
+       7.2 and 7.3.
+
+* Better option parsing
+       The configuration parsing routines are now far cleaner and
+       order is now more deterministic.  The following order of
+       precedence exists:
+
+       -  Command line options (other than configsi and configall)
+          override all other sources.
+       -  User specified config file (with --cfgfile option)
+       -  Standard in (with --stdin option)
+       -  Global config file (/etc/systemconfig/systemconfig.conf)
+       -  Command line options configsi and configall
+
+       Hence --configsi on the command line will turn on --confighw,
+       --confignet, and --runboot.  Adding "confighw = no" to 
+       /etc/systemconfig/systemconfig.conf with turn of the --confighw
+       option.
+
+* Gatewaydev added
+       The GATEWAYDEV option was added to the [NETWORK] block.  This
+       allows the user to override the default, which is the device
+       name of the first interface.  This is only supported for Red
+       Hat style network configuration.
+
+* Hardware table update
+       The PCI ID to kernel module table has been updated to include
+       more recent ids.  Hopefully this helps everyone.
+
+* Keyboard hack
+       It was found that SuSE SLES7 defaults the keyboard
+       configuration to german, by setting a field in rc.config.  SC
+       now blanks that value (which defaults the keyboard to en-US.)
+       This behavior can be turned off by adding "configkeyboard = no"
+       to the systemconfig.conf file.
+
+* EFI enhancements
+       The EFI module was made more generic, so it won't assume the
+       EFI partition is the first partition of the first disk, and
+       allows for boot files that are not in the toplevel directory.
+
+

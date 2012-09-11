@@ -1,0 +1,242 @@
+- 2.2.2 Mar 26 2005
+	* added kernel version detection patch from Erik Jacobson
+	* updated hardware detection module
+	* support modprobe.conf for 2.6 kernels
+	* 2.2.0 & 2.2.1 never released as they were test cuts for 
+          these features
+
+- 2.0.10 Mar 14, 2004
+	* add EFI path used by SLES9, patch from Erik Jacobson
+	* Fix path for mkinitrd on Debian systems, patch from vvidic
+
+- 2.0.9 Nov 19, 2003
+	* Alpha support for, er alpha (aboot, to be precise)
+	* Some fixes for EFI style elilo booting, including knowledge
+	  of where sgi stores their elilo.efi.
+	* add xfs module mapping to Root.pm (thanks to Erik Jacobson)
+
+- 2.0.8 Jul 10, 2003
+	* Fixed bug in hardware ordering which was missed as common
+	  case worked properly.
+
+- 2.0.7 Apr 21, 2003
+	* Changes to Devfs.pm for device transformation to work with 
+	  cciss and ida devices..
+
+- 2.0.6 Apr 11, 2003
+        * make file handle local to fix grub problems during deployment.
+
+- 2.0.5 Jan 21, 2003
+        * Added [NETWORK] SHORTHOSTNAME (boolean) to allow for short
+          host names to be used during install (SuSE8 and LinuxConf
+          modules (i.e. RedHat and Mandrake) now support this
+        * Added [BOOT] PREFERRED to allow for overriding the preferred
+          order to try to setup boot loaders.  The only use at this
+          point is to specify "Boot::Grub" to get grub used on a
+          system that has both grub and lilo functional
+        * Do the right thing is a domain name is not specified in
+          SuSE8 module
+
+- 2.0.4 Jan 9, 2003
+	* Fixed bug in Time::Zone modules, now they actually work :)
+	  (previously they would barf on filesmod call)
+	* Allow for '.' in release number for kernel (to allow RedHat's
+	  2.4.18-19.7.x notation)
+	* Changed hardware behavior.  Group of modules happens now
+	  as well as the ability to order via [HARDWARE] ORDER = XX YY
+
+- 2.0.3 Nov 8, 2002
+	* added iSeries Hardware detection
+	* UL 1.0 & SLES8 adjustments to SuSE8 networking module
+	* Final YaBoot fixes (tested on Power3 SuSE 7.1 and SLES8)
+	* Removed man 3 pages from rpm package
+
+- 2.0.2 Oct 22, 2002
+	* Fix for SuSE initrd generation, hardware modules
+	  now in the right order, and exit 9 is ignored.
+
+- 2.0.1 Oct 16, 2002
+	* Hardware refresh
+	* added hardware.lst override cabability
+	* grub finally works in System Imager 3.0 (devfs translation
+	  works now)
+	* updated systemconfigurator man page
+
+- 2.0.0 Oct 1, 2002
+	* Final doc fixes
+	* Grub support fixed
+
+- 1.9.6 Sept 10, 2002
+	* iSeries fixes
+
+- 1.9.5 July 29, 2002
+	* Redid all config parsing code (less warnings about undefined
+	  variables should now exist)
+	* Added more config parsing tests
+
+- 1.9.4 June 12, 2002
+	* Fixed a number of SuSE8 networking setup issues.
+	* Made Time Zone code actually work.
+	* Created a hack to reset KEYTABLE on Suse 7.x to default (US).  
+	  It was defaulting to german quertz keyboard without this.
+	* Made it possible to turn off timezone, keyboard, and userexit portions of code
+
+- 1.9.3 June 11, 2002
+        Minor Bug Update
+        Bugs Fixed:
+                * Module detection doesn't blow up on ext2 root
+                * Initrd builds properly on SuSE during install
+	Features:
+		* Added Debian Time Zone support
+
+- 1.9.2 June 11, 2002
+        Major Feature Update
+        Features:
+                * Finished SuSE kernel module detection
+                * Ramdisks now built for SuSE 7.x and 8.0
+                * TimeZone config files built for Red Hat (and cousins) and SuSE
+                           (Debian still coming) 
+
+- 1.9.1 June 5, 2002
+	First development release on road to 2.0.0 (sorry for changing
+	numbering schemes again)
+	Major Feature Update
+	Features:
+		* Added UserExit capabilities
+		* Added SuSE 8.x network support
+		* Added SuSE kernel module detection (incomplete)
+		* Hardware Table refresh
+		
+	Known Bugs:
+		* Ramdisks don't get built for SuSE at all yet 
+		* Ramdisks don't get built for any distro without
+		    a mkinitrd script
+		* SuSEconfig is run way too many times (need a generic
+		    way to run this at the end)
+		* TimeZone config files aren't written out properly
+		* Docs are out of date for things like UserExit
+		* Grub still has some issues that need to be addressed for
+		    Red Hat 7.3
+
+	Use of this version of SC is only suggested for Red Hat, Mandrake,
+	Conectiva and Debian users.  All other users should stay with the
+	last stable version.
+
+- 1.25  April 3, 2002 (This was only released into the OSCAR CVS tree)
+	Minor Feature Update
+	Features: 
+		* Changed the way Initial Ramdisk generation was done
+		  (not complete yet, but works for Debian and Red Hat)
+		* Added Support for setting up Timezones (incomplete)
+		
+- 1.20  Feb 20, 2002
+	Minor Feature Update
+	Features:
+		* Added support for gzipped modules in building
+		  an initial ramdisk
+		* Addition of VGA section in [BOOT]
+		* Addition of EXTRAS section in [BOOT]. (See 
+		  systemconfig.conf(5) for more details)
+		* Update of the Hardware::PCI::Table module with
+		  newer PCI ids
+	Bugs:
+		* made the tests run cleaner
+
+- 1.10  Feb 12, 2002
+	Minor bugfix release
+	Bug Fixes:
+		* Lilo updates
+
+- 1.01  Dec 7, 2001
+	Minor bugfix release
+	Bug Fixes:
+		* Elilo fixes for Debian
+
+- 1.00  Criton (Oct 25, 2001)
+	Minor bugfix release
+	Bug Fixes:
+		* EFI fixes for Red Hat
+		* SuSE Yaboot fixes
+
+- 0.88  Sun (Oct 1, 2001)
+	Major feature release
+	Features:
+		* Addition of Elilo support (Debian IA64)
+		* Addition of EFI support (Red Hat IA64)
+	Bug Fixes:
+		* cleanup of debian packages
+		* cleanup of rpm packages
+		* few more Grub fixes
+
+- 0.87  D'Argo + 2 (Aug 21, 2001)
+        Major feature release
+        Features:
+                * Addition of Palo support (HPA Risc bootloader)
+                * Addition of Initial Ramdisk generating libraries
+        
+- 0.86  D'Argo + 1 (Aug 14, 2001)
+        Minor bug fix release
+        Bug Fixes:
+                * Fixed Grub bootloading process.  It now works with
+                  System Imager
+                * addition of systemconfig.conf (5) man page
+                * updated documentation
+
+- 0.85  D'Argo (Aug 6, 2001)
+        Major feature release
+        Features:
+                * First release of systemconfigurator with packages (rpm and deb)
+                * Major namespace change.  (SystemConfig:: gone,
+                  modules now installed in /usr/lib/systemconfig)
+                * Seperation of boot setup into configuration setup
+                  and loader installation (--configboot and --runboot).
+                * Inclusion of --configsi which configures all the
+                  components needed for a standard SystemImager install.
+
+- 0.31  Moya + 1 (Jul 7, 2001)
+        Major bug fix release
+        Features:
+                * Addition of DNS setup during networking
+                * Updated Hardware Database Module, and changed internal format
+        Bug Fixes:
+                * boot modules added to MANIFEST (doh!)
+                * configboot set to 1 by default
+                * boot tests split into 3 parts, which can now all run as normal user
+                * YaBoot.pm can now use a fakeroot proc to figure out processor type
+                * Ripped some Labels out of the code
+                * Other minor code cleanups
+
+- 0.30  Moya (Jun 24, 2001)
+        Major feature release
+        Features:
+                * Bootstrapping support added.  The following bootloaders are supported:
+                                * Lilo 
+                                * Grub
+                                * YaBoot (tested on SuSE 7.1 PPC)
+                * Hostname and Domain name flags added to networking
+                * Automated build of AppConfig and Net::Netmask modules if they
+                  are not already at proper levels in your environment.
+
+- 0.20  Zhaan (May 16, 2001)
+        Major feature release
+        Features: 
+                  * PCI Detection of ethernet, tokenring, and scsi devices
+                  * Generation of kernel module entries for ethernet, tokenring, and scsi
+                    for the following files
+                        * /etc/modules.conf
+                        * /etc/conf.modules
+                        * /etc/modutils/aliases (plus execution of update-modules)
+                  * added sample.cfg sample config file to distribution
+
+- 0.10  (May 1, 2001)
+        Initial Release!
+        Features:
+                * basic systemconfigurator script
+                * generic networking api which supports 4 types of network
+                  scripts
+                  * LinuxConf templates - RedHat, Mandrake, Connectiva,
+                    Turbo, Red Flag
+                  * RCConfig networking - SuSE
+                  * Interfaces networking - Debian 2.2, Progeny
+                  * RawNetworking - Debian 2.1
+                * Support for alternate roots for script manipulation

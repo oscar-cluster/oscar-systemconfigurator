@@ -1,0 +1,287 @@
+=head1 NAME
+
+systemconfig.conf - System Configurator configuration file
+
+=head1 DESCRIPTION
+
+This file, by default located in /etc/systemconfig/systemconfig.conf is used by
+the systemconfigurator program to determine what configuration information
+should be applied to your system.
+
+The file looks something like the following:
+
+  # This is a comment
+  [NETWORK]
+  GATEWAY = 192.168.42.1
+  DNS1 = 192.168.42.254
+
+  [INTERFACE0]
+  DEVICE = eth0
+  TYPE = dhcp
+
+  [INTERFACE1]
+  DEVICE = eth1
+  IPADDR = 192.168.64.5
+  NETMASK = 255.255.255.0
+  TYPE = static
+
+The configuration is divided into blocks of two types:
+	Global blocks (like [NETWORK] above), and 
+	Instance blocks (like [INTERFACE0] above).  
+
+Each instance block can have as many entries as desired.  The number following the type must be unique for each new block.
+
+=head1 OPTIONS
+
+The following options are available within the config file
+
+=head1 B<[NETWORK]>
+
+The following options exist inside of the B<NETWORK> block:
+
+=over 4
+
+=item B<GATEWAY>
+
+The default network gateway for the machine.  This should be specified in
+dotted decimal notation (i.e. 192.168.42.1).  On a multiple interface machine,
+I<GATEWAY> will be attached to whatever I<DEVICE> was specified for B<INTERFACE0>
+
+=item B<HOSTNAME>
+
+The hostname for the machine.  This should be the single word short hostname,
+not the fully qualified hostname.
+
+=item B<SHORTHOSTNAME>
+
+Whether or not to use the short hostname when setting up host names
+(only affects some network modules).  The value can be YES or NO, and
+defaults to NO (i.e. use fully qualified name as host name) if not
+specified.
+
+=item B<DOMAINNAME>
+
+The domainname of the machine.  This is an optional parameter.
+
+=item B<SEARCH>
+
+The search list for resolv.conf.  This should be a string which looks just as
+the search string in resolv.conf (i.e. "sub.domain1.com sub2.domain2.com domain1.com").
+
+=item B<DNS1>, B<DNS2>, B<DNS3>
+
+You can specify up to three Domain Name Servers in the configuration file.  They
+should be the dotted decimal ip address of the domain name servers you wish to use.
+
+(Note: if you are using DHCP to configure your machines, the nameservers will probably
+be specified by your DHCP server, hence these variables will have no effect.)
+
+=back
+
+=head1 [INTERFACE\d+]
+
+The following directives may exist for an INTERFACE\d+ block.  You may have
+as many INTERFACE blocks as you like, as long as each one has a separate numeral
+identifier.  (i.e. INTERFACE0, INTERFACE1, INTERFACE2 ...).
+
+If you wish to specify a I<GATEWAY> you must specify B<INTERFACE0>.  Otherwise
+there is no requirement on specifying specific B<INTERFACE> blocks.
+
+=over 4
+
+=item B<DEVICE>
+
+The network device this interface corresponds to.  Should be of the format I<eth0>, I<tr0>, or whatever the device name of your network interface happens to be.
+
+=item B<TYPE>
+
+The protocol to use when booting.  There are three valid values for type: I<static>, I<bootp>,
+and I<dhcp>.  Static indicates that a static ip will be provided, while bootp and dhcp
+specify the boot protocol to use for dynamic address configuration.
+
+=item B<IPADDR>
+
+The static IP address to be assigned to the host.
+
+=item B<NETMASK>
+
+The subnet mask to be used for the host.
+
+=back
+
+=head1 B<[HARDWARE]>
+
+The following variables can be assigned in the B<[HARDWARE]> section.
+
+=over 4
+
+=item B<ORDER>
+
+The format of the B<ORDER> stanza is a list of module names (for example):
+
+  [HARDWARE]
+  ORDER = e1000 eepro100 pcnet32
+
+If B<ORDER> is specified, the hardware list detected on the client
+will be modified to ensure the listed modules are listed first, and in
+the order specified.  This will override the normal ordering of
+modules (and hence aliases for eth0...ethN) which is based on the
+device's location on the pcbus.
+
+Note: be careful when setting this, as some users have noticed that
+not all modules can be loaded in any order.
+
+=back
+
+=head1 B<[BOOT]>
+
+The following variables can be assigned in the B<[BOOT]> section.
+
+=over 4
+
+=item B<PREFERED>
+
+This specifies the prefered boot module (i.e. Boot::Lilo or
+Boot::Grub).  This can be specified in an environment where multiple
+modules may be functional, and the default order System Configurator
+tries them is picks one other than what the administrator desires.
+
+=item B<ROOTDEV>
+
+The device name that will be mounted as the root file system.  Should be 
+specified in the format "/dev/hda#" or "/dev/sda#".
+
+=item B<BOOTDEV>
+
+This specifies which device is your boot device (generally /dev/hda or /dev/sda).
+It is required by the boot loader to know where it should install itself.
+
+=item B<TIMEOUT>
+
+How long the boot loader should wait before booting.  This value specifies the
+number of tenths of seconds to wait.  For instance, B<TIMEOUT = 50> specifies that
+the boot loader pause for 5 seconds before starting the boot process.
+
+=item B<DEFAULTBOOT>
+
+The name of kernel to boot by default.
+
+=item B<APPEND>
+
+Any kernel parameters you want appended to all kernels specified in the 
+KERNEL## blocks.
+
+=item B<VGA>
+
+Set the VGA mode for the boot process.  This defaults to 'normal'.
+(Note: Currently only works for lilo)
+
+=item B<EXTRAS>
+
+This allows you to set any additional line you wish in the global
+section of the bootloader conf.  (Note: Currently only works for lilo)
+
+=back
+
+=head1 [KERNEL\d+]
+
+The following directives may exist for a KERNEL\d+ block.  You may have
+as many KERNEL blocks as you like, as long as each one has a separate numeral
+identifier.  (i.e. KERNEL0, KERNEL1, KERNEL2 ...).
+
+=over 4
+
+=item B<PATH>
+
+The path to the kernel image.  Generally of the form B</boot/vmlinuz-2.2.17-5>.
+
+=item B<LABEL>
+
+A name for the kernel.
+
+=item B<INITRD>
+
+The initial ramdisk to be used by the kernel during boot.  This may be optional
+if your boot devices are supported without additional kernel modules.  If no
+initrd is specified, then systemconfigurator will attempt to create one if it
+is necessary.
+
+=item B<APPEND>
+
+An arbitrary string to be appended to the kernel during boot.  This will often 
+be used for things such as specifying single user mode, or specifying that cdrom
+devices should be utilized via the ide-scsi emulation layer.
+
+=item B<ROOTDEV>
+
+The device (e.g. /dev/hda3) that will be used as the root file system for the kernel.
+This will be inherited from the global option if not specified in the image.
+
+=item B<HOSTOS>
+
+For virtual machine support often a two stage kernel loading is needed. HOSTOS
+allows to specify the first stage, in XEN this is called the domain 0 kernel.
+An example of a XEN kernel configuration block:
+
+    [KERNEL0]
+        PATH = /boot/xen.gz
+        LABEL = Xen
+        APPEND = dom0_mem=131072
+        HOSTOS = /boot/vmlinuz-dom0
+        INITRD = /boot/initrd.img-dom0
+
+
+=back
+
+=head1 [TIME]
+
+System Configurator allows for the setting of time zones in a generic way.
+By default this option is enabled, however no changes to the filesystem will
+be done unless valid time options are added to the stanza.  This will both
+create the right I</etc/localtime> file and set any configuration variables
+which are needed for normal operation.
+
+=over 4
+
+=item B<ZONE>
+
+The time zone, in glibc format (e.g. I<America/New_York>).
+
+=item B<UTC>
+
+Whether the hardware clock is in UTC.  Defaults to true.
+
+=back
+
+=head1 [USEREXIT\d+]
+
+System Configurator supports an arbitrary number of user exits.  Each
+user exit will be run in turn.  The user exits are the last things run by 
+systemconfigurator, so it will have full access to the client operating system.
+The first user exit to return a bad exit code will stop the processing of the rest 
+of the user exits.
+
+Each user exit block takes two stanzas.
+
+=over 4
+
+=item B<CMD>
+
+The command to be run (e.g. I<touch>).  If the command is not found, or not executable, this
+user exit will be skipped.
+
+=item B<PARAMS>
+
+Any parameters needed to be passed to the command.  Future versions may allow the passing
+of other variables that System Configurator has access to, but this is not yet supported.
+
+=head1 AUTHORS
+
+  Sean Dague <japh@us.ibm.com>
+  Donghwa John Kim <johkim@us.ibm.com>
+  Joe Greenseid <jgreenseid@users.sourceforge.net>
+
+=head1 SEE ALSO
+
+L<systemconfigurator>, L<AppConfig>, L<perl>
+

@@ -1,0 +1,43 @@
+*** System Configurator Project ***
+
+System Configurator is a project which attempts to be an automated system
+setup utility for Linux.
+
+It smooths over differences between Linux distributions and hardware platforms
+by providing a unified API to set up networking, hardware, and boot strapping.
+
+System Configurator is heavily developed by a 
+crack team of ring tailed lemurs.  Any issues should be directed to their feeder
+at sisuite-users@lists.sourceforge.net.
+
+It is still in its infancy, so if you wish to help out, please visit the 
+System Configurator home page (http://systemconfig.sourceforge.net).
+
+*** NOTE ***
+
+System Configurator is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License located in the COPYING file of this
+distribution for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+*** NOTE 2 ***
+
+No animals, real, imaginary, or fantastic were harmed during the creation
+of this software.
+
+*** NOTE 3 ***
+
+There is a possible exception to NOTE 2, as significant quantities of sushi
+were consumed during the design of this project.
+
+

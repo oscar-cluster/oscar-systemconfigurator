@@ -1,0 +1,77 @@
+#!/usr/bin/perl -w
+#
+# This script prints out information about the boot kernel, initrd, rootdevice
+# and append string configured in the /etc/systemconfig/systemconfig.conf
+# file used by systemconfigurator to generate the bootloader configuration.
+#
+# Copyright (c) 2007 Erich Focht <efocht@hpce.nec.com>
+#
+
+use lib '/usr/lib/systemconfig';
+use Initrd::Generic;
+
+my $debug;
+my $scconf="/etc/systemconfig/systemconfig.conf";
+$debug = 1 if ($ARGV[0] && $ARGV[0] eq "-d");
+
+sub dprint {
+    print @_ if $debug;
+}
+
+sub scconf_get {
+    my ($block, $var) = @_;
+    dprint "Calling: scconf-tool -q --block $block --var $var $scconf\n";
+    my $val=`scconf-tool -q --block $block --var $var $scconf`;
+    chomp $val;
+    if ($val =~ m/^\"(.*)\"$/) {
+	$val = $1;
+    }
+    return $val;
+}
+
+# find default boot kernel label
+my $dfltboot = &scconf_get("BOOT", "DEFAULTBOOT");
+dprint "Default boot label: $dfltboot\n";
+
+if (!$dfltboot) {
+    print "Could not locate default boot kernel in $scconf\n";
+    exit 1;
+}
+
+# locate KERNEL block with the default boot label
+my ($kpath, $kernel);
+for my $k (0 .. 20) {
+    $kernel = "KERNEL$k";
+    my $label = &scconf_get($kernel, "LABEL");
+    if ($label eq $dfltboot) {
+	$kpath = &scconf_get($kernel, "PATH");
+	last;
+    }
+    $kernel = "";
+}
+
+if (!$kpath) {
+    print "Could not locate kernel definition block for $dfltboot in $scconf\n";
+    exit 1;
+}
+dprint "Kernel path: $kpath\n";
+$kpath = "/boot/$kpath" if ($kpath && ($kpath !~ m:^/:));
+
+my $dfltroot = &scconf_get("BOOT", "ROOTDEV");
+my $rootdev = &scconf_get($kernel, "ROOTDEV");
+$rootdev = $dfltroot if (!$rootdev);
+
+my $append = &scconf_get("BOOT", "APPEND") . " "
+    . &scconf_get($kernel, "APPEND");
+
+my $initrd = &scconf_get($kernel, "INITRD");
+$initrd = "/boot/$initrd" if ($initrd && ($initrd !~ m:^/:));
+dprint "Initrd in kernel block: $initrd\n";
+$initrd = &initrd_file(&kernel_version($kpath)) if !$initrd;
+
+dprint "Append string: $append\n";
+dprint "Root device: $rootdev\n";
+dprint "Initrd: $initrd\n";
+print "$kpath $rootdev $initrd root=$rootdev ro $append\n";
+
+exit 0;

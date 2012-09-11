@@ -1,0 +1,49 @@
+systemconfigurator (2.2.10-2) unstable; urgency=low
+
+  * added ps3 kboot support
+  * sanity checking config file (added by Bernard)
+
+ -- Erich Focht <efocht@hpce.nec.com>  Mon, 22 Oct 2007 17:45:25 +0100
+
+systemconfigurator (2.2.9-1) unstable; urgency=low
+
+  [ Geoffroy Vallee ]
+  * Initial package.
+
+  [ Erich Focht ]
+  * Updated copyright info.
+  * Updated maintainer info.
+  * Mon Apr 22 2007 Erich Focht
+    - version 2.2.9 tag/release
+  * Fri Mar 30 2007 Erich Focht
+    - Added debian support which was in the OSCAR pkgsrc repository, provided
+    by Geoffroy Vallee. Also added an extension of the syntax for supporting
+    xen virtual machines.
+  * Mon Mar 26 2007 Erich Focht
+    - Added scconf-tool, a tool for querying and manipulating the
+    /etc/systemconfig/systemconfig.conf file from shell scripts.
+    - Added scconf-bootinfo, a helper tool for detecting boot information.
+    Used by the kexec boot method of systemimager.
+  * Wed Mar 21 2007 Erich Focht
+    - Patches to bring systemconfigurator to the level of the version included
+    into OSCAR 5.0 (sc-2.2.7-12ef). In order to avoid confusion, updating the
+    version number to 2.2.8-1. Changes are listed below:
+  * Wed Oct 25 2006 Erich Focht]
+    - fixing issue with unknown additional scsi device (oscar bug #274).
+  * Fri Sep 15 2006 Erich Focht
+    - locating "env" with "which". Path to env is different in SuSE and RedHat.
+  * Wed Aug 23 2006 Erich Focht
+    - added check for --no-floppy support of grub (RHEL3 doesn't support it)
+    - made functions in Grub.pm more OO. Needed for storing "nofloppy" capability
+    centrally, in the object instance.
+  * Mon Aug 07 2006 Erich Focht
+    - added --no-floppy to grub calls as suggested by Andrea Righi.
+  * Mon Jul 17 2006 Erich Focht
+    - added <HOSTID>, <HOSTID+nnn> and <HOSTID-nnn> hostname dependent
+    variable replacement (in the global APPEND block of the BOOT section).
+  * Fri Nov 24 2006 Erich Focht <efocht@hpce.nec.com>
+    - first step in merging with changes from the OSCAR tree
+    - changes correspond to systemconfigurator distributed with OSCAR 4.2
+
+
+ -- Erich Focht <efocht@hpce.nec.com>  Mon, 23 Apr 2007 09:45:25 -0400

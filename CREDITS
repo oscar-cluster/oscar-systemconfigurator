@@ -1,0 +1,56 @@
+SystemConfigurator is heavilly used in OSCAR (Open Source Cluster Application Resources)
+for doing the final configuration on freshly deployed cluster nodes.
+
+Development of the original systemconfigurator project has slowed down very much
+since the year 2003. The main contributions to the development and maintenance of
+systemconfigurator have come since then from OSCAR developers:
+
+* Erich Focht <efocht@hpce.nec.com>
+* Bernard Li
+* David N. Lombard
+* Geoffroy Vallee
+
+=================================================================================
+Credits below are for development until the year 2003.
+=================================================================================
+System Configurator Credits - Copyright 2001-2003 International Business Machines
+
+System Configurator is Free Software, and is supported by a number of 
+individual contributors.
+
+The following people have contributed code and documentation to System 
+Configurator to make it what it is today (alphabetic order):
+
+* Bryan Bayerdorffer <colmode@user.sourceforge.net:>
+* Michael Chase-Salerno <bratac@us.ibm.com>
+* Sean Dague <japh@us.ibm.com>
+* Dann Frazier <daniel_frazier@hp.com>
+* Joe Greenseid <jgreen@t-rex.thunderlizards.net>
+* Igor Grobman <ilgrobma@us.ibm.com>
+* V Hoffman <zeus@olympus.phys.wesleyan.edu>
+* Erik Jacobson - <erikj@subway.americas.sgi.com>
+* John Kim <johkim@us.ibm.com>
+* Pramath Ramaswamy <pramath@us.ibm.com>
+* Alain St-Denis <Alain.St-Denis@ec.gc.ca>
+
+The team would also like to thank the following people for contributing
+ideas, advice, and often massive testing.  All of this is directly
+responsible for the fine software you see here today.
+
+* Trey Belew <trey@veggie.wesleyan.edu>
+* Steven A. DuChene <sad@echelonsupercompute.com>
+* Rich Ferri <rcferri@us.ibm.com>
+* Brian Finley <brian@systemimager.org>
+* Lynn Moss <lynnmoss@us.ibm.com>
+* Nick Henke <henken@seas.upenn.edu>
+* Carl Pecinovsky <csky@us.ibm.com>
+
+We would like to thank David Muir Sharnoff for his excellent
+Net::Netmask module (available seperately via CPAN URL<http://cpan.org>).  
+This module is included in System Configurator for doing network math.
+
+We would like to also thank the Linux Mandrake Harddrake team for their
+compilation of device drivers used in the linux kernel.  A modified 
+version of that datafeed is included in System Configurator as a Perl
+module for the hardware detection component.
+
