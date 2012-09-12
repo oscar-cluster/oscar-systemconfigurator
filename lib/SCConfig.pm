@@ -1,6 +1,6 @@
 package SCConfig;
 
-#   $Id: SCConfig.pm 696 2007-10-02 22:58:56Z bli $
+#   $Id: SCConfig.pm 708 2007-11-10 00:51:03Z efocht $
 
 #   Copyright (c) 2001 International Business Machines
 
@@ -25,7 +25,7 @@ use Data::Dumper;
 use AppConfig qw(:expand :argcount);
 use vars qw($VERSION);
 
-$VERSION = sprintf("%d", q$Revision: 696 $ =~ /(\d+)/);
+$VERSION = sprintf("%d", q$Revision: 708 $ =~ /(\d+)/);
 
 my %cfg = (
            CASE => 0,
@@ -285,21 +285,24 @@ sub check_config {
     my $boot_rootdev = $config->get('boot_rootdev');
     my $boot_bootdev = $config->get('boot_bootdev');
 
-    if ( $boot_rootdev && ! -e $boot_rootdev ) {
-	print("ROOTDEV $boot_rootdev under [BOOT] does not exist, please check your systemconfigurator config\n");
-	exit 1;
+    unless ( ($boot_rootdev) && ($boot_rootdev =~ /^UUID|^LABEL/) ) {
+	if ( $boot_rootdev && ! -e $boot_rootdev ) {
+	    print("ROOTDEV $boot_rootdev under [BOOT] does not exist, please check your systemconfigurator config\n");
+	    exit 1;
+	}
     }
 
-    if ( $boot_bootdev && ! -e $boot_bootdev ) {
-	print("BOOTDEV $boot_bootdev under [BOOT] does not exist, please check your systemconfigurator config\n");
-	exit 1;
-    } 
-
+    unless ( ($boot_bootdev) && ($boot_bootdev =~ /^UUID|^LABEL/) ) {
+	if ( $boot_bootdev && ! -e $boot_bootdev ) {
+	    print("BOOTDEV $boot_bootdev under [BOOT] does not exist, please check your systemconfigurator config\n");
+	    exit 1;
+	}
+    }
     for (my $i = 0; $i < $number; $i++) {
 	my $var = "kernel$i"."_path";
 	my $kernel = $config->get("$var");
-	
-	if ( $kernel && ! -e $kernel ) {
+
+	if ( "$kernel" && ! -e "$kernel" ) {
 	    print("Kernel $kernel under [KERNEL$i] does not exist, please check your systemconfigurator config\n");
 	    exit 1;
 	}

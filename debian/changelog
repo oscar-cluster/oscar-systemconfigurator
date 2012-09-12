@@ -1,3 +1,10 @@
+systemconfigurator (2.2.11-1) unstable; urgency=low
+
+  * allowing UUID and LABEL device names
+  * fixed check for grub
+
+ -- Erich Focht <efocht@hpce.nec.com>  Thu, 08 Nov 2007 22:25:15 +0100
+
 systemconfigurator (2.2.10-2) unstable; urgency=low
 
   * added ps3 kboot support

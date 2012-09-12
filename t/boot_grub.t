@@ -49,6 +49,11 @@ if(!$root) {
 
 my $skip;
 
+chomp(my $grub=`which grub`);
+if (!$grub) {
+    croak("Could not locate grub! Is your PATH including /usr/sbin?");
+}
+
 copy("/proc/partitions","$root/proc/partitions") or ($skip = 1);
 copy("/etc/fstab","$root/etc/fstab") or ($skip = 1);
 copy(which('grub'),"$root/usr/sbin/grub") or ($skip = 1);
@@ -57,6 +62,7 @@ copy(which('cat'),"$root/bin/cat") or ($skip = 1);
 copy(which('blkid'),"$root/sbin/blkid") or ($skip = 1);
 copy(which('grub-install'),"$root/usr/sbin/grub-install") or ($skip = 1);
 system("chmod a+x $root/usr/sbin/*");
+system("chmod a+x $root/sbin/*");
 
 open(OUT, ">$root/boot/vmlinuz");
 print OUT "test\n";
@@ -93,51 +99,5 @@ skip($skip,$grubconf,'/initrd \(hd\d+,\d+\)/(boot/)?initrd-2.4.2-2.img/');
 
 close(IN);
 
-#system("rm -rf $root");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+system("rm -rf $root");
 
