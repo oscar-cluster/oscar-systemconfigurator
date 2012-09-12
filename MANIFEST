@@ -79,7 +79,6 @@ README
 README.yaboot
 RELEASE.NOTES
 sample.cfg
-sc.spec
 sc.spec.in
 t/01_sysconf0.t
 t/01_sysconf1.t
