@@ -69,5 +69,5 @@ WriteMakefile(
               'PREREQ_PM' => {
                               AppConfig => 1.52,
                              },
-              'realclean' => {FILES => "*.old *.bak *.tar.gz *.yml *.spec Makefile MANIFEST"},
+              'realclean' => {FILES => "*.old *.bak *.tar.gz *.spec Makefile "},
              );
