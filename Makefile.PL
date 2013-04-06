@@ -24,8 +24,11 @@ deb :: deb_prep dist
 rpm_prep ::
 \tcp -a ./sc.spec.in ./sc.spec && perl -pi -e 's/\\\@VERSION@/$version/' ./sc.spec
 
-rpm :: srpm 
+rpm :: rpm_prep manifest dist
 \trpmbuild -tb \$(NAME)-\$(VERSION).tar.gz
+\t\@if [ -n "\$(PKGDEST)" ]; then \\
+\t\tmv \$(shell rpm --eval '%{_rpmdir}')/noarch/\$(NAME)-*.noarch.rpm \$(PKGDEST); \\
+\tfi
 
 srpm :: rpm_prep manifest dist
 \trpmbuild -ts \$(NAME)-\$(VERSION).tar.gz
