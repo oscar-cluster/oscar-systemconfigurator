@@ -75,10 +75,12 @@ lib/Util/FileMod.pm
 lib/Util/Log.pm
 Makefile.PL
 MANIFEST			This list of files
+META.yml			Module meta-data (added by MakeMaker)
 README
 README.yaboot
 RELEASE.NOTES
 sample.cfg
+sc.spec
 sc.spec.in
 t/01_sysconf0.t
 t/01_sysconf1.t
@@ -124,4 +126,3 @@ t/timez.t
 t/userexit.t
 t/z_scbin.t
 TODO
-META.yml                                 Module meta-data (added by MakeMaker)
