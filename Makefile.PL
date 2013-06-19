@@ -16,10 +16,11 @@ POD2MAN5_EXE = \$(POD2MAN_EXE) "--section=5"
 deb_prep :: manifest
 \tperl -pi.bak -e 's/^VERSION.*/VERSION = $version/' debian/rules
 
-deb :: deb_prep dist
-\tmkdir -p /tmp/scdeb
-\tmv systemconfigurator-$version.tar.gz /tmp/scdeb && cd /tmp/scdeb && tar -xvzf systemconfigurator-$version.tar.gz && cd systemconfigurator-$version && dpkg-buildpackage && rm -rf /tmp/scdeb/systemconfigurator-$version
-\techo "Debian Packages have been built in /tmp/scdeb"
+deb :: deb_prep
+\tdpkg-buildpackage -rfakeroot -b -uc -us
+\t\@if [ -n "\$(PKGDEST)" ]; then \\
+\t\tmv ../systemconfigurator*.deb \$(PKGDEST); \\
+\tfi
 
 rpm_prep ::
 \tcp -a ./sc.spec.in ./sc.spec && perl -pi -e 's/\\\@VERSION@/$version/' ./sc.spec
