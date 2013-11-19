@@ -170,23 +170,3 @@ L<SystemConifg::Network>, L<Net::Netmask>, L<perl>
 =cut
 
 1;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
