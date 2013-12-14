@@ -178,7 +178,7 @@ sub setup_kernel {
     else { $label = inc_cnt(); }
     
     my ($kern_dev, $kernel_mnt) =
-	Boot::Path->get_mountinfo($this->{$kernel . "_path"},
+	SystemConfig::Boot::Path->get_mountinfo($this->{$kernel . "_path"},
 				  "$this->{root}/etc/fstab");
     if ($kern_dev =~ /(\d+)$/) {
 	$bootpartition = $1;
@@ -188,7 +188,7 @@ sub setup_kernel {
     }
 
     print $outfh "$label:$bootpartition" .
-	Boot::Path->strip_parent($kernel_mnt, $this->{$kernel . "_path"});
+	SystemConfig::Boot::Path->strip_parent($kernel_mnt, $this->{$kernel . "_path"});
 
 
     ### the local append overwrites the global append
@@ -202,7 +202,7 @@ sub setup_kernel {
     ### aboot requires the kernel & initrd to be on the same partition.
     if ($$this{$kernel . "_initrd"}) {
 	my ($initrd_dev, $initrd_mnt) =
-	    Boot::Path->get_mountinfo($this->{$kernel . "_initrd"},
+	    SystemConfig::Boot::Path->get_mountinfo($this->{$kernel . "_initrd"},
 				      "$this->{root}/etc/fstab");
 	### there should never be a case where both of these comparisons
 	### fail... but test them both, just in case
@@ -212,7 +212,7 @@ sub setup_kernel {
 		  " do not appear to be on the same partition");
 	}
 	my $relative_initrd =
-	    Boot::Path->strip_parent($initrd_mnt,
+	    SystemConfig::Boot::Path->strip_parent($initrd_mnt,
 				     $this->{$kernel . "_initrd"});
 	print $outfh " initrd=$relative_initrd";
     }
@@ -238,7 +238,7 @@ sub install_loader {
     
     ## find the partition number containing the config file
     my ($config_dev, $config_mnt) =
-	Boot::Path->get_mountinfo("$$this{config_file}",
+	SystemConfig::Boot::Path->get_mountinfo("$$this{config_file}",
 				  "$this->{root}/etc/fstab");
     my $config_part;
     if ($config_dev =~ /(\d+)$/) {

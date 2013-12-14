@@ -1,3 +1,5 @@
+- 2.2.11 Sat 14 2013
+	* Migrated to INSTALLDIRS=vendor in SystemConfig module.
 - 2.2.2 Mar 26 2005
 	* added kernel version detection patch from Erik Jacobson
 	* updated hardware detection module

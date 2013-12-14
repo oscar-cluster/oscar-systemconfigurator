@@ -1,3 +1,9 @@
+systemconfigurator (2.2.12-1) unstable; urgency=low
+
+  * new upstream version see changlog for more info.
+
+ -- Olivier Lahaye <olivier.lahaye1@free.fr>  Sat, 14 Dec 2013 18:29:31 +0100
+
 systemconfigurator (2.2.11-1) unstable; urgency=low
 
   * allowing UUID and LABEL device names

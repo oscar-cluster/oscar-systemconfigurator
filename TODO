@@ -26,6 +26,8 @@ Minor Code Work
 
 Major Code Work
 ------------------
+* Port to Grub2
+* Fix all obsolete code so all tests works.
 * Implement promiscous mode:
   - Detect all hardware and setup network interfaces which are not user specified
   - Detect all kernels in /boot and / and add them to the $config kernel\d blocks

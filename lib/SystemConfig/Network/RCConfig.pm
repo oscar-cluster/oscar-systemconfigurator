@@ -111,7 +111,7 @@ searching for keys which look like interface\d+_device (i.e. interface0_device).
 It then passes the interface\d+ part of that to the setup_interface() method,
 and captures the config hash built for each interface.
 
-It uses an instance of Util::FileMod to modify the rc.config
+It uses an instance of SystemConfig::Util::FileMod to modify the rc.config
 file in place.
 
 =cut
@@ -141,7 +141,7 @@ sub setup_interfaces {
 
 =item setup_interface($number, $interface) 
 
-This creates the variables for the Util::FileMod file instance to modify
+This creates the variables for the SystemConfig::Util::FileMod file instance to modify
 /etc/rc.config for each interface.  $number is the rc.config interface
 number that should be used.
 

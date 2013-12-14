@@ -84,7 +84,7 @@ calling the interface defined below.
 =head1 MODULE INTERFACE
 
 To write a Network Module which will plug into Network, your
-module should be a subclass of Network::Generic.  It must then overload
+module should be a subclass of SystemConfig::Network::Generic.  It must then overload
 certain methods.  Please see L<SystemConfig::Network::Generic> for more information.
 
 =head1 AUTHOR

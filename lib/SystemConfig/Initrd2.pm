@@ -38,7 +38,7 @@ SystemConfig::Initrd - builds initial ramdisks for kernels
 
 =head1 SYNOPSIS
 
-Initrd::setup($config);
+SystemConfig::Initrd::setup($config);
 
 =head1 DESCRIPTION
 

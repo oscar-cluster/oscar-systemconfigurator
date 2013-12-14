@@ -53,7 +53,7 @@ sub getlist {
     my @hardware = ();
 
     # This loads overrides from the hardware.lst file
-    Hardware::PCI::Table::_load_overrides('/etc/systemconfig/hardware.lst');
+    SystemConfig::Hardware::PCI::Table::_load_overrides('/etc/systemconfig/hardware.lst');
     
     open(IN,"<$$this{root}/proc/bus/pci/devices") or croak("Can't open $$this{root}/proc/bus/pci/devices");
     while(<IN>) {
@@ -86,7 +86,7 @@ SystemConfig::Hardware::PCI::Detect - detect pci devices from /proc/bus/pci/devi
 
 DetectPCI is a simple program that reads /proc/bus/pci/devices and returns the list
 of pci devices that it contains.  These can latter be translated to kernel modules by
-a large hash table provided in Hardware::PCI::Table.
+a large hash table provided in SystemConfig::Hardware::PCI::Table.
 
 =head1 COPYRIGHT
 

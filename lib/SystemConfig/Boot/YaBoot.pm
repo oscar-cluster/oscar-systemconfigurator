@@ -359,28 +359,8 @@ sub find_bootdev {
 
 =head1 SEE ALSO
 
-L<SystemConifg::Boot>, L<perl>
+L<SystemConfig::Boot>, L<perl>
 
 =cut
 
 1;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

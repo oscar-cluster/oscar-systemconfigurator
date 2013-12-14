@@ -5,7 +5,7 @@ use Carp;
 #  Version is set here globally so we can be more tricky with it
 ###
 
-my $version = '2.2.11';
+my $version = '2.2.12';
 
 sub MY::postamble {
     my $string = <<EOF;

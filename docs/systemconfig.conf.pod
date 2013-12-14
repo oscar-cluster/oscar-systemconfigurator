@@ -141,8 +141,8 @@ The following variables can be assigned in the B<[BOOT]> section.
 
 =item B<PREFERED>
 
-This specifies the prefered boot module (i.e. Boot::Lilo or
-Boot::Grub).  This can be specified in an environment where multiple
+This specifies the prefered boot module (i.e. SystemConfig::Boot::Lilo or
+SystemConfig::Boot::Grub).  This can be specified in an environment where multiple
 modules may be functional, and the default order System Configurator
 tries them is picks one other than what the administrator desires.
 

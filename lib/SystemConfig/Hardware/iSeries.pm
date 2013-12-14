@@ -82,7 +82,7 @@ SystemConfig::Hardware::iSeries - detect pci devices from /proc/bus/pci/devices
 
 DetectPCI is a simple program that reads /proc/bus/pci/devices and returns the list
 of pci devices that it contains.  These can latter be translated to kernel modules by
-a large hash table provided in Hardware::PCI::Table.
+a large hash table provided in SystemConfig::Hardware::PCI::Table.
 
 =head1 COPYRIGHT
 

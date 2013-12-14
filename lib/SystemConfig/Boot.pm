@@ -81,7 +81,7 @@ sub install_config {
     # We have a much more robust error condition now to catch all those rsync bugs
     unless ($complete) {
         print STDERR "Error: None of the following bootloaders were successfully setup on your system:\n";
-        print STDERR (join ',', (map {s/Boot:://; $_;} @boottypes)) . "\n\n";
+        print STDERR (join ',', (map {s/SystemConfig::Boot:://; $_;} @boottypes)) . "\n\n";
         exit(1);
     }
     return @files;
@@ -120,7 +120,7 @@ sub install_loader {
     
     unless ($complete) {
         print STDERR "Error: None of the following bootloaders were successfully setup on your system:\n";
-        print STDERR (join ',', (map {s/Boot:://; $_;} @boottypes)) . "\n\n";
+        print STDERR (join ',', (map {s/SystemConfig::Boot:://; $_;} @boottypes)) . "\n\n";
         my $devname = $config->get('boot_bootdev');
         # only go down this path if you came from a System Installer image
         if($devname) {

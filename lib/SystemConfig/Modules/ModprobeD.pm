@@ -26,7 +26,7 @@ SystemConfig::Modules::ModprobeD - setup for /etc/modutils/aliases
 
 =head1 SYNOPSIS
 
- my $aliases = new SysemConfig::Kernel::ModutilsAleases(%vars);
+ my $aliases = new SystemConfig::Kernel::ModutilsAleases(%vars);
 
  if ($aliases->footprint()) {
       $aliases->setup();

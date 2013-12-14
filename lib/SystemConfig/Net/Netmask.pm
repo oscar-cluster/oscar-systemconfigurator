@@ -409,8 +409,8 @@ SystemConfig::Net::Netmask - parse, manipulate and lookup IP network blocks
 
 	$block = new SystemConfig::Net::Netmask (network block)
 	$block = new SystemConfig::Net::Netmask (network block, netmask)
-	$block = new2 Net::Netmask (network block)
-	$block = new2 Net::Netmask (network block, netmask)
+	$block = new2 SystemConfig::Net::Netmask (network block)
+	$block = new2 SystemConfig::Net::Netmask (network block, netmask)
 
 	print $block->desc() 		# a.b.c.d/bits
 	print $block->base() 
@@ -442,16 +442,16 @@ SystemConfig::Net::Netmask - parse, manipulate and lookup IP network blocks
 
 =head1 DESCRIPTION
 
-Net::Netmask parses and understands IPv4 CIDR blocks.  It's built
+SystemConfig::Net::Netmask parses and understands IPv4 CIDR blocks.  It's built
 with an object-oriented interface.  Nearly all functions are 
-methods that operate on a Net::Netmask object.
+methods that operate on a SystemConfig::Net::Netmask object.
 
 There are methods that provide the nearly all bits of information
 about a network block that you might want.
 
 =head1 CONSTRUCTING
 
-Net::Netmask objects are created with an IP address and optionally
+SystemConfig::Net::Netmask objects are created with an IP address and optionally
 a mask.  There are many forms that are recognized:
 
 =over 32
@@ -500,8 +500,8 @@ return a netmask object even if the constructor could not figure out
 what the network block should be.
 
 With C<new>, the error string can be found as $block->{'ERROR'}.  With
-C<new2> the error can be found as Net::Netmask::errstr or 
-$Net::Netmask::error.
+C<new2> the error can be found as SystemConfig::Net::Netmask::errstr or 
+$SystemConfig::Net::Netmask::error.
 
 =head1 METHODS
 
@@ -640,7 +640,7 @@ is expected to be a string.  If more than one block in the table
 contains the IP address, the smallest network block will be the 
 one returned.
 
-The return value is either a Net::Netmask object or undef.
+The return value is either a SystemConfig::Net::Netmask object or undef.
 
 =item B<findOuterNetblock>(ip, [$t])
 
@@ -650,7 +650,7 @@ is expected to be a string.   If more than one block in the table
 contains the IP address, the largest network block will be the 
 one returned.
 
-The return value is either a Net::Netmask object or undef.
+The return value is either a SystemConfig::Net::Netmask object or undef.
 
 =item B<findAllNetblock>(ip, [$t])
 
@@ -659,7 +659,7 @@ find if any of them contain the given IP address.  The IP address
 is expected to be a string.   All network blocks in the table that
 contain the IP address will be returned.
 
-The return value is a list of Net::Netmask objects.
+The return value is a list of SystemConfig::Net::Netmask objects.
 
 =item B<range2cidrlist>($startip, $endip)
 
@@ -667,7 +667,7 @@ Given a range of IP addresses, return a list of blocks that
 span that range.
 
 For example, range2cidrlist('216.240.32.128', '216.240.36.127'),
-will return a list of Net::Netmask objects that corrospond to:
+will return a list of SystemConfig::Net::Netmask objects that corrospond to:
 
 	216.240.32.128/25
 	216.240.33.0/24
@@ -676,11 +676,11 @@ will return a list of Net::Netmask objects that corrospond to:
 
 =item B<cidrs2contiglists>(@listOfBlocks)
 
-C<cidrs2contiglists> will rearange a list of Net::Netmask objects
+C<cidrs2contiglists> will rearange a list of SystemConfig::Net::Netmask objects
 such that contigueous sets are in sublists and each sublist is
 discontigeous with the next.
 
-For example, given a list of Net::Netmask objects corrosponding to
+For example, given a list of SystemConfig::Net::Netmask objects corrosponding to
 the following blocks:
 
 	216.240.32.128/25

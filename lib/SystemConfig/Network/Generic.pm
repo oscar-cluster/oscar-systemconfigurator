@@ -40,8 +40,8 @@ SystemConfig::Network::Generic - A generic networking module
 
 =head1 DESCRIPTION
 
-The Network::Generic module is the parent class of all Networking
-implementations in the System Configurator project.  Network::Generic
+The SystemConfig::Network::Generic module is the parent class of all Networking
+implementations in the System Configurator project.  SystemConfig::Network::Generic
 defines a very robust constructor, as well as an AUTOLOAD method
 which provides access to all the internal variables.
 
@@ -173,7 +173,7 @@ sub setup_global {
 
 =item setup_dns()
 
-setup_dns() is called by setup() once.  It exists in Network::Generic because
+setup_dns() is called by setup() once.  It exists in SystemConfig::Network::Generic because
 most distributions use exactly the same method to setup dns files.  It
 can be overloaded if required by a sub class.
 
@@ -229,7 +229,7 @@ sub setup_interfaces {
 =item setup_interface($interface) 
 
 This will be called once per interface.  It will be passed a reference to the 
-Network::Interface object that represents that interface.
+SystemConfig::Network::Interface object that represents that interface.
 
 =cut
 
