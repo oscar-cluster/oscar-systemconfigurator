@@ -12,7 +12,7 @@ BEGIN {
 $PERL = "perl -w -Iblib/lib";
 
 eval {
-    use SCConfig;
+    use SystemConfig::SCConfig;
     return 1;
 };
 

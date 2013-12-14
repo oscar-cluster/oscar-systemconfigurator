@@ -69,9 +69,8 @@ WriteMakefile(
                           'MAN1EXT' => '1',
                           'MAN3EXT' => '3pm',
                          },
-              'INSTALLSITELIB' => '/usr/lib/systemconfig',
               'PREREQ_PM' => {
                               AppConfig => 1.52,
                              },
-              'realclean' => {FILES => "*.old *.bak *.tar.gz *.spec Makefile "},
+              'realclean' => {FILES => "*.old *.bak *.tar.gz *.spec Makefile MANIFEST"},
              );

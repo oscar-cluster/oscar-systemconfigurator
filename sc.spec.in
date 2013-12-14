@@ -13,7 +13,7 @@ Packager: Erich Focht <efocht@hpce.nec.com>
 Buildroot: /var/tmp/%{name}-%{version}-root
 BuildArchitectures: noarch
 BuildRequires: perl-AppConfig
-AutoReqProv: no
+#AutoReqProv: no
 
 %description
 Unified Configuration API for Linux Installation
@@ -32,7 +32,7 @@ configuration files.
 
 # No configure, no make, just copy files to the output dir.
 %build
-%{__perl} Makefile.PL --prefix=%{_prefix}
+%{__perl} Makefile.PL INSTALLDIRS=vendor
 
 %{__make} %{?_smp_mflags}
 
@@ -40,40 +40,22 @@ configuration files.
 #{__make} test
 
 %install
-%{__make} install \
-	PREFIX=$RPM_BUILD_ROOT \
-	INSTALLSITELIB=$RPM_BUILD_ROOT/usr/lib/systemconfig \
-	INSTALLSITEARCH=$RPM_BUILD_ROOT/usr/lib/systemconfig \
-	INSTALLSITEBIN=$RPM_BUILD_ROOT%{_bindir} \
-	INSTALLSITESCRIPT=$RPM_BUILD_ROOT%{_bindir} \
-	INSTALLMAN1DIR=$RPM_BUILD_ROOT%{_mandir}/man1 \
-	INSTALLMAN3DIR=$RPM_BUILD_ROOT%{_mandir}/man3 \
-	INSTALLSITEMAN1DIR=$RPM_BUILD_ROOT%{_mandir}/man1 \
-	INSTALLSITEMAN3DIR=$RPM_BUILD_ROOT%{_mandir}/man3
+%{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-rm -rf $RPM_BUILD_ROOT/usr/lib/systemconfig/auto*
-find $RPM_BUILD_ROOT -name perllocal.pod | xargs /bin/rm -f
-find $RPM_BUILD_ROOT -name .packlist |xargs /bin/rm -f
+# Remove garbage.
+rm -f ${RPM_BUILD_ROOT}%perl_archlib/perllocal.pod
+rm -rf ${RPM_BUILD_ROOT}%perl_vendorarch/auto
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%doc TODO 
-%doc CREDITS 
-%doc CHANGELOG 
-%doc README
-%doc INSTALL 
-%doc README.yaboot
-%doc COPYING
-%doc sample.cfg
-%doc docs/design.pod 
+%doc TODO CREDITS CHANGELOG README INSTALL README.yaboot COPYING sample.cfg docs/design.pod 
 %{_bindir}/*
 %{_mandir}/man1/*
 %{_mandir}/man5/*
-%{_prefix}/lib/systemconfig/*
-%dir %{_prefix}/lib/systemconfig
+%{perl_vendorlib}/SystemConfig
 
 %changelog
 * Fri Feb 22 2013 Olivier Lahaye 2.2.11-3

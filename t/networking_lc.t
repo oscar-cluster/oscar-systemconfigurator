@@ -15,14 +15,14 @@ BEGIN {
 }
 
 eval {
-    require SCConfig;
+    require SystemConfig::SCConfig;
     return 1;
 };
 
 ok($@,'') or croak("No point in going any further");
 
 eval {
-    require Network;
+    require SystemConfig::Network;
     return 1;
 };
 
@@ -52,7 +52,7 @@ croak() unless (-e "$root/etc/sysconfig/network-scripts/ifup");
 
 # Now we are ready to run tests.
 
-Network::setup($config);
+SystemConfig::Network::setup($config);
 
 # Does the gateway file exist
 ok(-e "$root/etc/sysconfig/network");

@@ -1,5 +1,5 @@
 use Test;
-use Util::Log;
+use SystemConfig::Util::Log;
 use Data::Dumper;
 use Carp;
 
@@ -19,11 +19,11 @@ BEGIN {
     @ARGV = qw(--root /tmp/sctests --time_zone America/New_York);
 }
 
-Util::Log::start_verbose();
-Util::Log::start_debug();
+SystemConfig::Util::Log::start_verbose();
+SystemConfig::Util::Log::start_debug();
 
 eval {
-    use SCConfig;
+    use SystemConfig::SCConfig;
     return 1;
 };
 
@@ -43,13 +43,13 @@ print OUT "test\n";
 close(OUT);
 
 eval {
-    use Time;
+    use SystemConfig::Time;
     return 1;
 };
 
 ok($@,'') or croak("No point in going any further");
 
-my @files = Time::setup($config);
+my @files = SystemConfig::Time::setup($config);
 
 ok($files[0],"$root/etc/localtime");
 ok($files[1],"$root/etc/sysconfig/clock");

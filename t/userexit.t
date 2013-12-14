@@ -1,5 +1,5 @@
 use Test;
-use Util::Log;
+use SystemConfig::Util::Log;
 use Data::Dumper;
 use Carp;
 
@@ -19,18 +19,18 @@ BEGIN {
     @ARGV = qw(--cfgfile t/cfg/userexit.cfg);
 }
 
-Util::Log::start_verbose();
-Util::Log::start_debug();
+SystemConfig::Util::Log::start_verbose();
+SystemConfig::Util::Log::start_debug();
 
 eval {
-    use SCConfig;
+    use SystemConfig::SCConfig;
     return 1;
 };
 
 ok($@,'') or croak("No point in going any further");
 
 eval {
-    use UserExit;
+    use SystemConfig::UserExit;
     return 1;
 };
 
@@ -46,5 +46,5 @@ if($config->userexit1_cmd) {
 # Okay now we test
 #
 
-ok(UserExit::setup($config),1);
+ok(SystemConfig::UserExit::setup($config),1);
 

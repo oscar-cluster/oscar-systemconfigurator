@@ -9,7 +9,7 @@ BEGIN {plan tests => 19;
 }
 
 eval {
-    use SCConfig;
+    use SystemConfig::SCConfig;
     return 1;
 };
 

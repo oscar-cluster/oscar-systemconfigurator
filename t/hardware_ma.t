@@ -21,21 +21,21 @@ BEGIN {
 }
 
 eval {
-    use SCConfig;
+    use SystemConfig::SCConfig;
     return 1;
 };
 
 ok($@,'') or croak("No point in going any further");
 
 eval {
-    use Hardware;
+    use SystemConfig::Hardware;
     return 1;
 };
 
 ok($@,'') or croak("No point in going any further");
 
 eval {
-    use Modules::ModutilsAliases;
+    use SystemConfig::Modules::ModutilsAliases;
     return 1;
 };
 
@@ -91,7 +91,7 @@ croak() unless (-e "$proc/devices");
 
 # This will blow up, as the update-modules can't run in test, that is ok.
 eval {
-    Hardware::setup($config);
+    SystemConfig::Hardware::setup($config);
 };
 
 #skip(!$@,1,1,"Can't test without a full chroot");
@@ -137,7 +137,7 @@ croak() unless (-e "$proc/devices");
 
 # Now we are ready to run tests.
 eval {
-    Hardware::setup($config);
+    SystemConfig::Hardware::setup($config);
 };
 
 ok(-e "$dir/aliases");

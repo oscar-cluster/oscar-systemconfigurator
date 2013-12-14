@@ -17,14 +17,14 @@ BEGIN {
 }
 
 eval {
-    use SCConfig;
+    use SystemConfig::SCConfig;
     return 1;
 };
 
 ok($@,'') or croak("No point in going any further");
 
 eval {
-    use Hardware;
+    use SystemConfig::Hardware;
     return 1;
 };
 
@@ -78,7 +78,7 @@ croak() unless (-e "$proc/devices");
 open(TEST,">$dir/conf.modules");
 close(TEST);
 
-Hardware::setup($config);
+SystemConfig::Hardware::setup($config);
 
 ok(-e "$dir/conf.modules");
 
@@ -121,7 +121,7 @@ croak() unless (-e "$proc/devices");
 
 # Now we are ready to run tests.
 
-Hardware::setup($config);
+SystemConfig::Hardware::setup($config);
 
 ok(-e "$dir/conf.modules");
 

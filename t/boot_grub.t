@@ -1,7 +1,7 @@
 use Test;
 use Data::Dumper;
-use Util::Cmd qw(:all);
-use Util::Log qw(:all);
+use SystemConfig::Util::Cmd qw(:all);
+use SystemConfig::Util::Log qw(:all);
 use File::Copy;
 use Carp;
 use strict;
@@ -20,14 +20,14 @@ BEGIN {
 }
 
 eval {
-    use SCConfig;
+    use SystemConfig::SCConfig;
     return 1;
 };
 
 ok($@,'') or croak("No point in going any further");
 
 eval {
-    use Boot;
+    use SystemConfig::Boot;
     return 1;
 };
 
@@ -80,7 +80,7 @@ chmod 0644, "$root/boot/initrd-2.4.2-2.img";
     $ENV{PATH} = '/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin:' . $ENV{PATH};
     $ENV{PATH} = join ':', (map {"$root$_"} split(/:/,$ENV{PATH}));
     eval {
-        Boot::install_config($config);
+        SystemConfig::Boot::install_config($config);
     };
 }
 	

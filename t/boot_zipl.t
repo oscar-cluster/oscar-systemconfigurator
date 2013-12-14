@@ -3,7 +3,7 @@ use Data::Dumper;
 use Carp;
 use strict;
 use vars qw($config);
-use Util::Log;
+use SystemConfig::Util::Log;
 
 BEGIN {
     
@@ -17,18 +17,18 @@ BEGIN {
     @ARGV = qw(--nocheck --norunboot --cfgfile t/cfg/boot.cfg);
 }
 
-#Util::Log::start_verbose();
-#Util::Log::start_debug();
+#SystemConfig::Util::Log::start_verbose();
+#SystemConfig::Util::Log::start_debug();
 
 eval {
-    use SCConfig;
+    use SystemConfig::SCConfig;
     return 1;
 };
 
 ok($@,'') or croak("No point in going any further");
 
 eval {
-    use Boot;
+    use SystemConfig::Boot;
     return 1;
 };
 
@@ -57,7 +57,7 @@ chmod 0755, "$root/sbin/zipl";
     local %ENV = %ENV;
     $ENV{PATH} = '/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin:' . $ENV{PATH};
     $ENV{PATH} = join ':', (map {"$root$_"} split(/:/,$ENV{PATH}));
-    Boot::install_config($config);
+    SystemConfig::Boot::install_config($config);
 }
 
 open(IN,"<$root/etc/zipl.conf") or croak("Can't open $root/etc/zipl.conf");

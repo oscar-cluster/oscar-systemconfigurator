@@ -21,14 +21,14 @@ BEGIN {
 }
 
 eval {
-  use SCConfig;
+  use SystemConfig::SCConfig;
   return 1;
 };
 
 ok($@,'') or croak("No point in going any further");
 
 eval {
-  use Network;
+  use SystemConfig::Network;
   return 1;
 };
 
@@ -50,7 +50,7 @@ if(!-d $dir) {
     croak("No directory $dir exists");
 }
 
-Network::setup($config);
+SystemConfig::Network::setup($config);
 
 ok(! -e "$root/etc/resolv.conf");
 

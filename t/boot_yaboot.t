@@ -17,14 +17,14 @@ BEGIN {
 }
 
 eval {
-    use SCConfig;
+    use SystemConfig::SCConfig;
     return 1;
 };
 
 ok($@,'') or croak("No point in going any further");
 
 eval {
-    use Boot;
+    use SystemConfig::Boot;
     return 1;
 };
 
@@ -55,7 +55,7 @@ close(OUT);
     local %ENV = %ENV;
     $ENV{PATH} = '/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin:' . $ENV{PATH};
     $ENV{PATH} = join ':', (map {"$root$_"} split(/:/,$ENV{PATH}));
-    Boot::install_config($config);
+    SystemConfig::Boot::install_config($config);
 }
 
 open(IN,"<$root/etc/yaboot.conf") or croak("No yaboot.conf created!\n");

@@ -354,7 +354,7 @@ Revision 1.15  2001/07/06 17:46:34  greekboy
 added documentation for flags for bootloader
 
 Revision 1.14  2001/07/05 17:35:29  donghwajohnkim
-Fixed method call to Boot::setup_boot().
+Fixed method call to SystemConfig::Boot::setup_boot().
 
 Revision 1.13  2001/06/19 18:58:39  sdague
 added path manipulation
@@ -371,16 +371,16 @@ attempting to add Log keyword
 
 =cut
 
-use lib qw(lib /usr/lib/systemconfig);
-use SCConfig;
-use Network;
-use Hardware;
-use Initrd;
-use UserExit;
-use Boot;
-use Time;
-use Keyboard;
-use Util::Log qw(:all);
+#use lib qw(lib /usr/lib/systemconfig);
+use SystemConfig::SCConfig;
+use SystemConfig::Network;
+use SystemConfig::Hardware;
+use SystemConfig::Initrd;
+use SystemConfig::UserExit;
+use SystemConfig::Boot;
+use SystemConfig::Time;
+use SystemConfig::Keyboard;
+use SystemConfig::Util::Log qw(:all);
 use Carp;
 use strict;
 use vars qw($config $VERSION $EXEVERSION $VERBOSE);
@@ -432,35 +432,35 @@ if($root) {
 my @files = qw(/etc/systemconfig/systemconfig.conf);
 
 if($config->confighw()) {
-    push @files, Hardware::setup($config);
+    push @files, SystemConfig::Hardware::setup($config);
 }
 
 if ($config->confignet()) {
-    push @files, Network::setup($config);
+    push @files, SystemConfig::Network::setup($config);
 }
 
 if ($config->configrd()) {
-    push @files, Initrd::setup($config);
+    push @files, SystemConfig::Initrd::setup($config);
 }
 
 if ($config->configboot()) {
-    push @files, Boot::install_config($config);
+    push @files, SystemConfig::Boot::install_config($config);
 }
 
 if($config->runboot()) {
-    Boot::install_loader($config);
+    SystemConfig::Boot::install_loader($config);
 }
 
 if($config->configkeyboard()) {
-    Keyboard::setup($config);
+    SystemConfig::Keyboard::setup($config);
 }
 
 if($config->configtime()) {
-    push @files, Time::setup($config);
+    push @files, SystemConfig::Time::setup($config);
 }
 
 if($config->configuserexit()) {
-    UserExit::setup($config);
+    SystemConfig::UserExit::setup($config);
 }
 
 # print Dumper($config);

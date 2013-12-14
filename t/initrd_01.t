@@ -18,18 +18,18 @@ BEGIN {
     @ARGV = qw(--nocheck --cfgfile t/cfg/initrd_01.cfg);
 }
 
-Util::Log::start_verbose();
-Util::Log::start_debug();
+SystemConfig::Util::Log::start_verbose();
+SystemConfig::Util::Log::start_debug();
 
 eval {
-  use SCConfig;
+  use SystemConfig::SCConfig;
   return 1;
 };
 
 ok($@,'') or croak("No point in going any further");
 
 eval {
-  use Initrd;
+  use SystemConfig::Initrd;
   return 1;
 };
 
@@ -39,5 +39,5 @@ ok($@,'') or croak("No point in going any further");
 # Okay now we test
 #
 
-#Initrd::setup($config);
+#SystemConfig::Initrd::setup($config);
 

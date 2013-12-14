@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl -I. -w
 
-use Net::Netmask;
+use SystemConfig::Net::Netmask;
 use Carp;
 use Carp qw(verbose);
 
@@ -58,7 +58,7 @@ my $x;
 my ($addr, $mask, $base, $newmask, $bits, $max);
 while (($addr, $mask, $base, $newmask, $bits, $max) = splice(@rtests, 0, 6)) {
 	$mask = undef if $mask eq 'u';
-	$x = new Net::Netmask ($addr, $mask);
+	$x = new SystemConfig::Net::Netmask ($addr, $mask);
 
 	printf STDERR "test $test, %s %s: %s %s %d %d\n", 
 		$addr, $mask, $x->base(), $x->mask(), 
@@ -72,7 +72,7 @@ while (($addr, $mask, $base, $newmask, $bits, $max) = splice(@rtests, 0, 6)) {
 
 my @y;
 
-$x = new Net::Netmask ('209.157.64.0/19');
+$x = new SystemConfig::Net::Netmask ('209.157.64.0/19');
 print $x->size() == 8192 ? "ok $test\n" : "not ok $test\n"; $test++;
 
 print $x->hostmask() eq '0.0.31.255' ? "ok $test\n" : "not ok $test\n"; $test++;
@@ -85,7 +85,7 @@ print $y[31*3] eq '95.157.209.in-addr.arpa'
 	? "ok $test\n" : "not ok $test\n"; $test++;
 print defined($y[32*3]) ? "not ok $test\n" : "ok $test\n"; $test++;
 
-$x = new Net::Netmask ('140.174.82.4/32');
+$x = new SystemConfig::Net::Netmask ('140.174.82.4/32');
 print $x->size() == 1 ? "ok $test\n" : "not ok $test\n"; $test++;
 
 # perl bug: cannot just print this.
@@ -96,22 +96,22 @@ print $p;
 printf STDERR "REVERSE$test %s\n", $x->inaddr() if $debug;
 $test++;
 
-$x = new Net::Netmask ('140.174.82.64/27');
+$x = new SystemConfig::Net::Netmask ('140.174.82.64/27');
 print (($x->inaddr())[1] == 64 ? "ok $test\n" : "not ok $test\n"); $test++;
 print (($x->inaddr())[2] == 95 ? "ok $test\n" : "not ok $test\n"); $test++;
 @y = $x->inaddr();
 print STDERR "Y$test @y\n" if $debug;
 
-$x = new Net::Netmask ('default');
+$x = new SystemConfig::Net::Netmask ('default');
 print $x->size() == 4294967296 ? "ok $test\n" : "not ok $test\n"; $test++;
 
-$x = new Net::Netmask ('209.157.64.0/27');
+$x = new SystemConfig::Net::Netmask ('209.157.64.0/27');
 @y = $x->enumerate();
 print $y[0] eq '209.157.64.0' ? "ok $test\n" : "not ok $test\n"; $test++;
 print $y[31] eq '209.157.64.31' ? "ok $test\n" : "not ok $test\n"; $test++;
 print defined($y[32]) ? "not ok $test\n" : "ok $test\n"; $test++;
 
-$x = new Net::Netmask ('10.2.0.16/19');
+$x = new SystemConfig::Net::Netmask ('10.2.0.16/19');
 @y = $x->enumerate();
 print $y[0] eq '10.2.0.0' ? "ok $test\n" : "not ok $test\n"; $test++;
 print $y[8191] eq '10.2.31.255' ? "ok $test\n" : "not ok $test\n"; $test++;
@@ -120,12 +120,12 @@ print defined($y[8192]) ? "not ok $test\n" : "ok $test\n"; $test++;
 my $table = {};
 
 for my $b (@store) {
-	$x = new Net::Netmask ($b);
+	$x = new SystemConfig::Net::Netmask ($b);
 	$x->storeNetblock();
 }
 
 for my $b (@store2) {
-	$x = new Net::Netmask ($b);
+	$x = new SystemConfig::Net::Netmask ($b);
 	$x->storeNetblock($table);
 }
 
@@ -145,7 +145,7 @@ while (($addr, $result) = splice(@lookup2, 0, 2)) {
 }
 
 
-$newmask = Net::Netmask->new("192.168.1.0/24");
+$newmask = SystemConfig::Net::Netmask->new("192.168.1.0/24");
 print (($newmask->broadcast() eq "192.168.1.255") ? "ok $test\n" : "not ok $test\n"); $test++;
 print (($newmask->next() eq "192.168.2.0") ? "ok $test\n" : "not ok $test\n"); $test++;
 print ($newmask->match("192.168.0.255") ? "not ok $test\n" : "ok $test\n"); $test++;
@@ -170,7 +170,7 @@ print (((0+$newmask->match('192.168.1.0')) == 0) ? "ok $test\n" : "not ok $test\
 print (($newmask->match('192.168.1.0')) ? "ok $test\n" : "not ok $test\n"); $test++;
 
 my $bks;
-$block = new Net::Netmask '209.157.64.1/32';
+$block = new SystemConfig::Net::Netmask '209.157.64.1/32';
 $block->storeNetblock($bks);
 print findNetblock('209.157.64.1',$bks) ? "ok $test\n" : "not ok $test\n"; $test++;
 
@@ -183,7 +183,7 @@ my @store3 = qw(
 );
 my $table3 = {};
 for my $b (@store3) {
-	$x = new Net::Netmask ($b);
+	$x = new SystemConfig::Net::Netmask ($b);
 	$x->storeNetblock($table3);
 }
 lookeq($table3, "216.240.40.5", "216.240.40.4/30");
