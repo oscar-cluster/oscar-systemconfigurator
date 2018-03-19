@@ -71,7 +71,7 @@ rm -rf $RPM_BUILD_ROOT
 - added kboot support for PS3
 - sanity checking of devices (by Bernard)
 - version 2.2.10-2
-* Mon Apr 22 2007 Erich Focht
+* Sun Apr 22 2007 Erich Focht
 - version 2.2.9 tag/release
 * Fri Mar 30 2007 Erich Focht
 - Added debian support which was in the OSCAR pkgsrc repository, provided
